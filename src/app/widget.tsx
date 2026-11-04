@@ -31,7 +31,7 @@ function widgetHtml(publicKey: string, company: string, sdkUrl: string) {
       if(!window.RightTime)throw new Error('Le service de réservation est indisponible.');
       document.getElementById('righttime-root').innerHTML='';
       window.RightTime.init({publicKey:config.publicKey,company:config.company}).mount('#righttime-root',{
-        height:'fill',locale:'fr',title:'Réservation rightCare',
+        height:'fill',locale:'fr',title:'Réservation RightCom XP',
         onReady:function(){send('ready')},
         onBooked:function(appointment){send('booked',appointment)},
         onError:function(error){send('error',error)}
@@ -89,7 +89,7 @@ export default function SdkWidgetScreen() {
         <View style={styles.widgetFrame}>
           {pageLoading ? (
             <View style={styles.loading}>
-              <ActivityIndicator color="#087f70" />
+              <ActivityIndicator color="#0877ED" />
               <Text style={styles.messageText}>Préparation de vos disponibilités…</Text>
             </View>
           ) : null}
@@ -111,19 +111,19 @@ export default function SdkWidgetScreen() {
 }
 
 const styles = StyleSheet.create({
-  safeArea: { backgroundColor: '#f7faf9', flex: 1, padding: 18, gap: 14 },
-  heading: { backgroundColor: '#e7f4ef', borderRadius: 22, gap: 9, padding: 20 },
-  kickerPill: { alignSelf: 'flex-start', backgroundColor: '#d3ebe1', borderRadius: 20, paddingHorizontal: 10, paddingVertical: 5 },
-  kicker: { color: '#087f70', fontSize: 9, fontWeight: '800', letterSpacing: 0.9 },
-  title: { color: '#173d3a', fontSize: 24, fontWeight: '800', letterSpacing: -0.6 },
-  subtitle: { color: '#617b76', fontSize: 12, lineHeight: 18 },
-  widgetFrame: { backgroundColor: '#fff', borderColor: '#edf2ef', borderRadius: 18, borderWidth: 1, flex: 1, overflow: 'hidden' },
+  safeArea: { backgroundColor: '#FFFFFF', flex: 1, padding: 18, gap: 14 },
+  heading: { backgroundColor: '#EAF4FF', borderRadius: 22, gap: 9, padding: 20 },
+  kickerPill: { alignSelf: 'flex-start', backgroundColor: '#DCEBFF', borderRadius: 20, paddingHorizontal: 10, paddingVertical: 5 },
+  kicker: { color: '#0877ED', fontSize: 9, fontWeight: '800', letterSpacing: 0.9 },
+  title: { color: '#17192F', fontSize: 24, fontWeight: '800', letterSpacing: -0.6 },
+  subtitle: { color: '#68738A', fontSize: 12, lineHeight: 18 },
+  widgetFrame: { backgroundColor: '#fff', borderColor: '#E8ECF3', borderRadius: 18, borderWidth: 1, flex: 1, overflow: 'hidden' },
   webview: { backgroundColor: 'transparent', flex: 1 },
   loading: { alignItems: 'center', backgroundColor: '#fff', gap: 10, justifyContent: 'center', ...StyleSheet.absoluteFill, zIndex: 1 },
-  messageCard: { alignItems: 'center', backgroundColor: '#fff', borderColor: '#edf2ef', borderRadius: 18, borderWidth: 1, gap: 9, padding: 22 },
-  messageIcon: { alignItems: 'center', backgroundColor: '#e7f4ef', borderRadius: 20, height: 50, justifyContent: 'center', width: 50 },
-  messageIconText: { color: '#087f70', fontSize: 36, fontWeight: '300' },
-  messageTitle: { color: '#173d3a', fontSize: 15, fontWeight: '800', textAlign: 'center' },
-  messageText: { color: '#819591', fontSize: 12, lineHeight: 18, textAlign: 'center' },
-  event: { color: '#087f70', fontSize: 11, fontWeight: '600', textAlign: 'center' },
+  messageCard: { alignItems: 'center', backgroundColor: '#fff', borderColor: '#E8ECF3', borderRadius: 18, borderWidth: 1, gap: 9, padding: 22 },
+  messageIcon: { alignItems: 'center', backgroundColor: '#EAF4FF', borderRadius: 20, height: 50, justifyContent: 'center', width: 50 },
+  messageIconText: { color: '#0877ED', fontSize: 36, fontWeight: '300' },
+  messageTitle: { color: '#17192F', fontSize: 15, fontWeight: '800', textAlign: 'center' },
+  messageText: { color: '#8A91A3', fontSize: 12, lineHeight: 18, textAlign: 'center' },
+  event: { color: '#0877ED', fontSize: 11, fontWeight: '600', textAlign: 'center' },
 });
