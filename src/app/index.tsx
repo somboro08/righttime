@@ -18,8 +18,8 @@ interface ListedService {
   location: string;
 }
 
-const serviceColors = ['#dff4ed', '#e4efff', '#fff0df', '#f2eaff'];
-const serviceSymbols = ['✚', '♡', '◉', '✦'];
+const serviceColors = ['#EAF4FF', '#DCEBFF', '#EEF5FF', '#E8ECF3'];
+const serviceSymbols = ['XP', '01', '02', '03'];
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -67,7 +67,7 @@ export default function HomeScreen() {
       <ScrollView contentContainerStyle={styles.page} showsVerticalScrollIndicator={false}>
         <View style={styles.topBar}>
           <View style={styles.brandRow}>
-            <View style={styles.brandMark}><Text style={styles.brandMarkText}>+</Text></View>
+            <View style={styles.brandMark}><Text style={styles.brandMarkText}>XP</Text></View>
             <View>
               <Text style={styles.brandName}>RightCom XP</Text>
               <Text style={styles.brandCaption}>{companyName}</Text>
@@ -80,9 +80,9 @@ export default function HomeScreen() {
 
         <View style={styles.hero}>
           <View style={styles.heroCopy}>
-            <Text style={styles.heroEyebrow}>RIGHTCOM XP · RÉSERVATION</Text>
-            <Text style={styles.heroTitle}>Vos rendez-vous, en toute simplicité.</Text>
-            <Text style={styles.heroText}>Accédez aux services et choisissez le créneau qui vous convient.</Text>
+            <Text style={styles.heroEyebrow}>BIENVENUE SUR RIGHTCOM XP</Text>
+            <Text style={styles.heroTitle}>Une nouvelle expérience de réservation.</Text>
+            <Text style={styles.heroText}>Découvrez nos services et réservez votre créneau en quelques étapes.</Text>
             <Pressable accessibilityRole="button" onPress={() => router.push('/widget' as never)} style={styles.heroButton}>
               <Text style={styles.heroButtonText}>Prendre rendez-vous</Text>
               <Text style={styles.heroArrow}>›</Text>
@@ -90,8 +90,8 @@ export default function HomeScreen() {
           </View>
           <View style={styles.heroArt}>
             <View style={styles.artCircle} />
-            <View style={styles.artCross}><Text style={styles.artCrossText}>+</Text></View>
-            <View style={styles.artHeart}><Text style={styles.artHeartText}>♥</Text></View>
+            <View style={styles.artCross}><Text style={styles.artCrossText}>XP</Text></View>
+            <View style={styles.artHeart}><Text style={styles.artHeartText}>✦</Text></View>
             <View style={styles.artDot} />
           </View>
         </View>
@@ -103,8 +103,8 @@ export default function HomeScreen() {
 
         <View style={styles.sectionHeading}>
           <View>
-            <Text style={styles.sectionTitle}>Nos spécialités</Text>
-            <Text style={styles.sectionSubtitle}>Des professionnels à votre écoute</Text>
+            <Text style={styles.sectionTitle}>Nos services</Text>
+            <Text style={styles.sectionSubtitle}>Découvrez les services disponibles</Text>
           </View>
           <Pressable onPress={() => router.push('/booking' as never)}>
             <Text style={styles.seeAll}>Tout voir</Text>
@@ -117,11 +117,11 @@ export default function HomeScreen() {
         {!loading && error ? (
           <View style={styles.statusCard}>
             <View style={styles.statusIcon}><Text style={styles.statusIconText}>+</Text></View>
-            <View style={styles.statusCopy}><Text style={styles.statusTitle}>Bienvenue chez RightCom XP</Text><Text style={styles.statusText}>{error}</Text></View>
+            <View style={styles.statusCopy}><Text style={styles.statusTitle}>Bienvenue sur RightCom XP</Text><Text style={styles.statusText}>{error}</Text></View>
           </View>
         ) : null}
         {!loading && !error && services.length === 0 ? (
-          <View style={styles.statusCard}><Text style={styles.statusText}>Les spécialités seront bientôt disponibles.</Text></View>
+          <View style={styles.statusCard}><Text style={styles.statusText}>Les services seront bientôt disponibles.</Text></View>
         ) : null}
 
         <View style={styles.serviceGrid}>
@@ -138,8 +138,8 @@ export default function HomeScreen() {
 
         <View style={styles.widgetBanner}>
           <View style={styles.widgetBadge}><Text style={styles.widgetBadgeText}>rightTime</Text></View>
-          <Text style={styles.widgetTitle}>Un rendez-vous en quelques instants</Text>
-          <Text style={styles.widgetDescription}>Consultez les créneaux et réservez en toute simplicité.</Text>
+          <Text style={styles.widgetTitle}>Votre réservation, en toute simplicité</Text>
+          <Text style={styles.widgetDescription}>Choisissez votre service et trouvez le créneau qui vous convient.</Text>
           <Pressable onPress={() => router.push('/widget' as never)} style={styles.widgetButton}>
             <Text style={styles.widgetButtonText}>Découvrir le widget de réservation  ›</Text>
           </Pressable>
@@ -154,7 +154,7 @@ export default function HomeScreen() {
           <Text style={styles.integrationArrow}>›</Text>
         </Pressable>
 
-        <Text style={styles.footer}>RightCom XP · La réservation, simplement.</Text>
+        <Text style={styles.footer}>RIGHTCOM XP</Text>
       </ScrollView>
     </SafeAreaView>
   );
@@ -175,25 +175,25 @@ const styles = StyleSheet.create({
   page: { paddingHorizontal: 20, paddingTop: 8, paddingBottom: 32, gap: 22 },
   topBar: { alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between' },
   brandRow: { alignItems: 'center', flexDirection: 'row', gap: 10 },
-  brandMark: { alignItems: 'center', backgroundColor: '#0877ED', borderRadius: 13, height: 40, justifyContent: 'center', width: 40 },
-  brandMarkText: { color: '#fff', fontSize: 30, fontWeight: '300', lineHeight: 34 },
+  brandMark: { alignItems: 'center', backgroundColor: '#0877ED', borderRadius: 22, height: 44, justifyContent: 'center', width: 44 },
+  brandMarkText: { color: '#fff', fontSize: 18, fontWeight: '900', letterSpacing: -1.5 },
   brandName: { color: '#17192F', fontSize: 18, fontWeight: '800', letterSpacing: -0.5 },
   brandCaption: { color: '#8A91A3', fontSize: 11, marginTop: 1 },
   avatar: { alignItems: 'center', backgroundColor: '#EAF4FF', borderRadius: 22, height: 42, justifyContent: 'center', width: 42 },
   avatarText: { color: '#0877ED', fontSize: 15, fontWeight: '800' },
-  hero: { backgroundColor: '#EAF4FF', borderRadius: 26, minHeight: 232, overflow: 'hidden', padding: 22 },
+  hero: { backgroundColor: '#0877ED', borderRadius: 24, minHeight: 250, overflow: 'hidden', padding: 22 },
   heroCopy: { maxWidth: '76%', zIndex: 2 },
-  heroEyebrow: { color: '#0877ED', fontSize: 10, fontWeight: '800', letterSpacing: 1.1 },
-  heroTitle: { color: '#17192F', fontSize: 26, fontWeight: '800', letterSpacing: -0.8, lineHeight: 31, marginTop: 10 },
-  heroText: { color: '#68738A', fontSize: 12, lineHeight: 18, marginTop: 8 },
-  heroButton: { alignItems: 'center', alignSelf: 'flex-start', backgroundColor: '#0877ED', borderRadius: 12, flexDirection: 'row', gap: 12, marginTop: 17, paddingHorizontal: 14, paddingVertical: 11 },
-  heroButtonText: { color: '#fff', fontSize: 12, fontWeight: '700' },
-  heroArrow: { color: '#fff', fontSize: 20, lineHeight: 20 },
+  heroEyebrow: { color: '#D5E9FF', fontSize: 10, fontWeight: '800', letterSpacing: 1.1 },
+  heroTitle: { color: '#FFFFFF', fontSize: 26, fontWeight: '800', letterSpacing: -0.8, lineHeight: 31, marginTop: 10 },
+  heroText: { color: '#EAF4FF', fontSize: 12, lineHeight: 18, marginTop: 8 },
+  heroButton: { alignItems: 'center', alignSelf: 'flex-start', backgroundColor: '#FFFFFF', borderRadius: 12, flexDirection: 'row', gap: 12, marginTop: 17, paddingHorizontal: 14, paddingVertical: 11 },
+  heroButtonText: { color: '#0877ED', fontSize: 12, fontWeight: '700' },
+  heroArrow: { color: '#0877ED', fontSize: 20, lineHeight: 20 },
   heroArt: { height: 135, position: 'absolute', right: -2, top: 52, width: 115 },
-  artCircle: { backgroundColor: '#D6E9FF', borderRadius: 58, height: 116, position: 'absolute', right: 2, top: 12, width: 116 },
-  artCross: { alignItems: 'center', backgroundColor: '#fff', borderRadius: 15, elevation: 3, height: 48, justifyContent: 'center', position: 'absolute', right: 15, top: 40, width: 48 },
-  artCrossText: { color: '#0877ED', fontSize: 38, fontWeight: '300', lineHeight: 44 },
-  artHeart: { alignItems: 'center', backgroundColor: '#f4b5a8', borderRadius: 18, height: 36, justifyContent: 'center', left: 0, position: 'absolute', top: 85, width: 36 },
+  artCircle: { backgroundColor: '#2588F2', borderRadius: 58, height: 116, position: 'absolute', right: 2, top: 12, width: 116 },
+  artCross: { alignItems: 'center', backgroundColor: '#FFFFFF', borderRadius: 15, elevation: 3, height: 48, justifyContent: 'center', position: 'absolute', right: 15, top: 40, width: 48 },
+  artCrossText: { color: '#0877ED', fontSize: 24, fontWeight: '300', lineHeight: 44 },
+  artHeart: { alignItems: 'center', backgroundColor: '#55B9F4', borderRadius: 18, height: 36, justifyContent: 'center', left: 0, position: 'absolute', top: 85, width: 36 },
   artHeartText: { color: '#fff', fontSize: 17 },
   artDot: { backgroundColor: '#0877ED', borderRadius: 5, height: 10, position: 'absolute', right: 3, top: 2, width: 10 },
   quickRow: { flexDirection: 'row', gap: 10 },
@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
   widgetBadge: { alignSelf: 'flex-start', backgroundColor: '#1B4F91', borderRadius: 20, paddingHorizontal: 10, paddingVertical: 5 },
   widgetBadgeText: { color: '#D5E9FF', fontSize: 10, fontWeight: '700' },
   widgetTitle: { color: '#fff', fontSize: 17, fontWeight: '800', marginTop: 12 },
-  widgetDescription: { color: '#bed2cc', fontSize: 11, lineHeight: 17, marginTop: 5 },
+  widgetDescription: { color: '#D5E9FF', fontSize: 11, lineHeight: 17, marginTop: 5 },
   widgetButton: { alignSelf: 'flex-start', marginTop: 12 },
   widgetButtonText: { color: '#70C7F5', fontSize: 11, fontWeight: '700' },
   integrationLink: { alignItems: 'center', backgroundColor: '#fff', borderColor: '#E8ECF3', borderRadius: 16, borderWidth: 1, flexDirection: 'row', gap: 11, padding: 13 },
