@@ -1,8 +1,8 @@
-# rightCare
+# RightCom XP
 
-Application de démonstration mobile Rightcom pour découvrir des services de santé et prendre rendez-vous. Elle montre deux intégrations de `@rightcom/righttime-sdk` : le widget RightTime dans une WebView et un parcours de réservation construit en React Native avec les API du SDK.
+Application mobile de démonstration RightCom XP destinée à illustrer trois modes d’intégration de `@rightcom/righttime-sdk` : widget RightTime dans une WebView, parcours natif React Native construit avec les API du SDK et page de réservation hébergée dans une WebView.
 
-L’interface est conçue comme une application destinée aux patients. Les paramètres techniques ne sont pas affichés dans l’application : ils sont fournis à l’exécution par l’environnement Expo.
+L’interface adopte l’identité visuelle RightCom XP et présente une expérience de réservation cohérente sur l’ensemble des écrans. Les paramètres techniques ne sont pas affichés dans l’application : ils sont fournis à l’exécution par l’environnement Expo.
 
 ## Prérequis et démarrage
 
@@ -71,11 +71,11 @@ La dépendance Bun est déclarée comme `file:../sdk-frontend-feature-SE-e2e/pac
 - `src/app/webview.tsx` : page web de réservation intégrée en WebView.
 - `src/app/integrations.tsx` : catalogue des trois méthodes d’intégration.
 - `src/components/app-tabs.tsx` : navigation basse Accueil, Réserver et Widget.
-- `src/components/animated-icon.tsx` : animation du logo au démarrage.
+- `src/components/animated-icon.tsx` : animation du logo au démarrage.\n- `src/components/xp-logo.tsx` : marque vectorielle XP réutilisable.
 
 La barre d’état est configurée dans `src/app/_layout.tsx`. La police utilise la sans-serif native de la plateforme (Roboto sur Android, police système sans-serif sur iOS).
 
 ## Ressources visuelles
 
-`app.json` définit le nom `rightCare` et l’écran de démarrage natif. Le logo animé est dessiné en SVG avec `react-native-svg`, pour éviter de dépendre du chargement des fichiers SVG comme composants par Metro.
+`app.json` définit le nom `RightCom XP` et l’écran de démarrage natif. Le logo XP est dessiné localement avec `react-native-svg`, sans dépendre d’un chargement distant.
 
