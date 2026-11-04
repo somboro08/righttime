@@ -196,7 +196,7 @@ export default function CustomBookingScreen() {
           </InfoCard>
         ) : null}
 
-        {client && loadingCatalog ? <LoadingCard label="Chargement des calendriers médicaux…" /> : null}
+        {client && loadingCatalog ? <LoadingCard label="Chargement des établissements…" /> : null}
         {client && !loadingCatalog && calendars.length > 0 ? (
           <View style={styles.card}>
             <Text style={styles.sectionTitle}>01  ·  Votre établissement</Text>
@@ -231,7 +231,7 @@ export default function CustomBookingScreen() {
             </View>
             {selectedService ? (
               <Text style={styles.muted}>
-                {selectedService.description || 'Consultation médicale'} · {selectedService.duration}
+                {selectedService.description || 'Service'} · {selectedService.duration}
                 {selectedService.durationType === 'h' ? ' h' : ' min'}
               </Text>
             ) : null}
@@ -293,7 +293,7 @@ export default function CustomBookingScreen() {
 
         {error ? <InfoCard title="Une erreur est survenue" error>{error}</InfoCard> : null}
         {confirmation ? <InfoCard title="Rendez-vous confirmé" success>{confirmation}</InfoCard> : null}
-        {agents.length > 0 ? <Text style={styles.footer}>{agents.length} professionnel(s) disponible(s)</Text> : null}
+        {agents.length > 0 ? <Text style={styles.footer}>{agents.length} intervenant(s) disponible(s)</Text> : null}
       </ScrollView>
     </SafeAreaView>
   );
