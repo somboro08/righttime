@@ -183,7 +183,7 @@ export default function CustomBookingScreen() {
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.page} keyboardShouldPersistTaps="handled">
         <View style={styles.hero}>
-          <Text style={styles.kicker}>RIGHTCARE · À VOTRE ÉCOUTE</Text>
+          <Text style={styles.kicker}>RIGHTCOM XP · À VOTRE ÉCOUTE</Text>
           <Text style={styles.title}>Prenez rendez-vous</Text>
           <Text style={styles.subtitle}>
             Choisissez votre centre, le soin souhaité et un horaire qui vous convient.
@@ -254,7 +254,7 @@ export default function CustomBookingScreen() {
                 </Pressable>
               </View>
             </View>
-            {loadingSlots ? <ActivityIndicator color="#087f70" /> : null}
+            {loadingSlots ? <ActivityIndicator color="#0877ED" /> : null}
             {!loadingSlots && slots.length === 0 ? (
               <Text style={styles.muted}>Aucun créneau disponible ce mois-ci.</Text>
             ) : null}
@@ -347,43 +347,43 @@ function InfoCard(props: { title: string; children: string; error?: boolean; suc
 function LoadingCard(props: { label: string }) {
   return (
     <View style={styles.loadingCard}>
-      <ActivityIndicator color="#087f70" />
+      <ActivityIndicator color="#0877ED" />
       <Text style={styles.muted}>{props.label}</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: '#f7faf9' },
+  safeArea: { flex: 1, backgroundColor: '#FFFFFF' },
   page: { padding: 20, paddingTop: 12, paddingBottom: 40, gap: 14 },
-  hero: { backgroundColor: '#e7f4ef', borderRadius: 22, padding: 22, gap: 8 },
-  kicker: { color: '#087f70', fontSize: 10, fontWeight: '800', letterSpacing: 1 },
-  title: { color: '#173d3a', fontSize: 26, fontWeight: '800', letterSpacing: -0.6 },
-  subtitle: { color: '#617b76', fontSize: 13, lineHeight: 20 },
-  card: { backgroundColor: '#fff', borderColor: '#edf2ef', borderRadius: 18, borderWidth: 1, padding: 17, gap: 12 },
-  sectionTitle: { color: '#173d3a', fontSize: 16, fontWeight: '800' },
+  hero: { backgroundColor: '#EAF4FF', borderRadius: 22, padding: 22, gap: 8 },
+  kicker: { color: '#0877ED', fontSize: 10, fontWeight: '800', letterSpacing: 1 },
+  title: { color: '#17192F', fontSize: 26, fontWeight: '800', letterSpacing: -0.6 },
+  subtitle: { color: '#68738A', fontSize: 13, lineHeight: 20 },
+  card: { backgroundColor: '#fff', borderColor: '#E8ECF3', borderRadius: 18, borderWidth: 1, padding: 17, gap: 12 },
+  sectionTitle: { color: '#17192F', fontSize: 16, fontWeight: '800' },
   choiceList: { gap: 8 },
   choice: { backgroundColor: '#f7f9fc', borderColor: '#dce4ee', borderRadius: 10, borderWidth: 1, padding: 12 },
-  choiceSelected: { backgroundColor: '#e7f4ef', borderColor: '#087f70' },
+  choiceSelected: { backgroundColor: '#EAF4FF', borderColor: '#0877ED' },
   choiceText: { color: '#34465a', fontSize: 13, fontWeight: '600' },
-  choiceTextSelected: { color: '#087f70' },
+  choiceTextSelected: { color: '#0877ED' },
   muted: { color: '#708197', fontSize: 12, lineHeight: 18 },
   monthHeader: { gap: 10 },
   monthControls: { alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between' },
-  monthArrow: { color: '#087f70', fontSize: 30, paddingHorizontal: 8 },
+  monthArrow: { color: '#0877ED', fontSize: 30, paddingHorizontal: 8 },
   monthLabel: { color: '#34465a', fontSize: 14, fontWeight: '700', textTransform: 'capitalize' },
   field: { gap: 6 },
   label: { color: '#34465a', fontSize: 12, fontWeight: '700' },
-  input: { backgroundColor: '#f8faf9', borderColor: '#dce8e3', borderRadius: 12, borderWidth: 1, color: '#173d3a', fontSize: 14, minHeight: 48, paddingHorizontal: 12 },
-  bookButton: { alignItems: 'center', backgroundColor: '#087f70', borderRadius: 12, minHeight: 48, justifyContent: 'center', marginTop: 4 },
+  input: { backgroundColor: '#f8faf9', borderColor: '#DCE6F2', borderRadius: 12, borderWidth: 1, color: '#17192F', fontSize: 14, minHeight: 48, paddingHorizontal: 12 },
+  bookButton: { alignItems: 'center', backgroundColor: '#0877ED', borderRadius: 12, minHeight: 48, justifyContent: 'center', marginTop: 4 },
   bookButtonText: { color: '#fff', fontSize: 14, fontWeight: '700' },
   disabled: { opacity: 0.45 },
-  infoCard: { backgroundColor: '#fff', borderColor: '#edf2ef', borderRadius: 15, borderWidth: 1, padding: 16, gap: 5 },
+  infoCard: { backgroundColor: '#fff', borderColor: '#E8ECF3', borderRadius: 15, borderWidth: 1, padding: 16, gap: 5 },
   errorCard: { backgroundColor: '#fff0ef' },
   successCard: { backgroundColor: '#eaf8f1' },
-  infoTitle: { color: '#173d3a', fontSize: 14, fontWeight: '700' },
+  infoTitle: { color: '#17192F', fontSize: 14, fontWeight: '700' },
   errorText: { color: '#a52820' },
   successText: { color: '#18744a' },
-  loadingCard: { alignItems: 'center', backgroundColor: '#fff', borderColor: '#edf2ef', borderRadius: 15, borderWidth: 1, flexDirection: 'row', gap: 12, padding: 16 },
+  loadingCard: { alignItems: 'center', backgroundColor: '#fff', borderColor: '#E8ECF3', borderRadius: 15, borderWidth: 1, flexDirection: 'row', gap: 12, padding: 16 },
   footer: { color: '#7a899b', fontSize: 10, textAlign: 'center' },
 });
