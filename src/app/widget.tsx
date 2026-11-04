@@ -76,13 +76,13 @@ export default function SdkWidgetScreen() {
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.heading}>
         <View style={styles.kickerPill}><Text style={styles.kicker}>RIGHTCOM XP · RÉSERVATION</Text></View>
-        <Text style={styles.title}>Réserver un soin</Text>
+        <Text style={styles.title}>Réserver un créneau</Text>
         <Text style={styles.subtitle}>Réservez directement depuis le widget intégré à l’application.</Text>
       </View>
       {!ready ? (
         <View style={styles.messageCard}>
           <View style={styles.messageIcon}><Text style={styles.messageIconText}>+</Text></View>
-          <Text style={styles.messageTitle}>Les réservations arrivent bientôt</Text>
+          <Text style={styles.messageTitle}>Les réservations seront bientôt disponibles</Text>
           <Text style={styles.messageText}>Notre équipe prépare vos disponibilités. Revenez nous voir très bientôt.</Text>
         </View>
       ) : (
