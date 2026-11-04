@@ -33,7 +33,7 @@ export default function HomeScreen() {
   useEffect(() => {
     if (!client) {
       setServices([]);
-      setError('Les services ne sont pas disponibles pour le moment.');
+      setError('Impossible de charger les services pour le moment.');
       return;
     }
 
@@ -104,8 +104,8 @@ export default function HomeScreen() {
 
         <View style={styles.sectionHeading}>
           <View>
-            <Text style={styles.sectionTitle}>Nos services</Text>
-            <Text style={styles.sectionSubtitle}>Découvrez les services disponibles</Text>
+            <Text style={styles.sectionTitle}>Nos services disponibles</Text>
+            <Text style={styles.sectionSubtitle}>Explorez les prestations proposées</Text>
           </View>
           <Pressable onPress={() => router.push('/booking' as never)}>
             <Text style={styles.seeAll}>Tout voir</Text>
