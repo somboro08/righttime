@@ -1,19 +1,19 @@
 {
   "expo": {
-    "name": "rightCare",
-    "slug": "rightcare",
+    "name": "RightCom XP",
+    "slug": "rightcom-xp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "rightcare",
-    "userInterfaceStyle": "automatic",
+    "scheme": "rightcomxp",
+    "userInterfaceStyle": "light",
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "usesCleartextTraffic": true,
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
+        "backgroundColor": "#0877ED",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
@@ -29,7 +29,7 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#102B49",
+          "backgroundColor": "#0877ED",
           "image": "./assets/images/logo-glow.png",
           "imageWidth": 210
         }
