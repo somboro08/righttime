@@ -3,10 +3,10 @@ import { NativeTabs } from 'expo-router/native-tabs';
 export default function AppTabs() {
   return (
     <NativeTabs
-      backgroundColor="#ffffff"
+      backgroundColor="#FFFFFF"
       tintColor="#0877ED"
       indicatorColor="#DCEBFF"
-      labelStyle={{ default: { color: '#82918d' }, selected: { color: '#0877ED', fontWeight: '700' } }}>
+      labelStyle={{ default: { color: '#8A91A3' }, selected: { color: '#0877ED', fontWeight: '700' } }}>
       <NativeTabs.Trigger name="index">
         <NativeTabs.Trigger.Label>Accueil</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
