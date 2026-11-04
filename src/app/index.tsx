@@ -24,7 +24,7 @@ const serviceSymbols = ['✚', '♡', '◉', '✦'];
 export default function HomeScreen() {
   const router = useRouter();
   const { client } = useRightCare();
-  const [companyName, setCompanyName] = useState('Rightcom Santé');
+  const [companyName, setCompanyName] = useState('RightCom XP');
   const [services, setServices] = useState<ListedService[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -42,7 +42,7 @@ export default function HomeScreen() {
     Promise.all([client.getCompany(), client.listCalendars()])
       .then(([companyResponse, calendarResponse]) => {
         if (!mounted) return;
-        setCompanyName(companyResponse.result.companyInfo.displayName || 'Rightcom Santé');
+        setCompanyName(companyResponse.result.companyInfo.displayName || 'RightCom XP');
         setServices(
           calendarResponse.result.flatMap((calendar) =>
             (calendar.status ? calendar.services ?? [] : [])
@@ -69,7 +69,7 @@ export default function HomeScreen() {
           <View style={styles.brandRow}>
             <View style={styles.brandMark}><Text style={styles.brandMarkText}>+</Text></View>
             <View>
-              <Text style={styles.brandName}>rightCare</Text>
+              <Text style={styles.brandName}>RightCom XP</Text>
               <Text style={styles.brandCaption}>{companyName}</Text>
             </View>
           </View>
@@ -80,9 +80,9 @@ export default function HomeScreen() {
 
         <View style={styles.hero}>
           <View style={styles.heroCopy}>
-            <Text style={styles.heroEyebrow}>PRENEZ SOIN DE VOUS</Text>
-            <Text style={styles.heroTitle}>La santé, en toute simplicité.</Text>
-            <Text style={styles.heroText}>Trouvez le bon professionnel et choisissez votre créneau.</Text>
+            <Text style={styles.heroEyebrow}>RIGHTCOM XP · RÉSERVATION</Text>
+            <Text style={styles.heroTitle}>Vos rendez-vous, en toute simplicité.</Text>
+            <Text style={styles.heroText}>Accédez aux services et choisissez le créneau qui vous convient.</Text>
             <Pressable accessibilityRole="button" onPress={() => router.push('/widget' as never)} style={styles.heroButton}>
               <Text style={styles.heroButtonText}>Prendre rendez-vous</Text>
               <Text style={styles.heroArrow}>›</Text>
@@ -112,12 +112,12 @@ export default function HomeScreen() {
         </View>
 
         {loading ? (
-          <View style={styles.statusCard}><ActivityIndicator color="#087f70" /><Text style={styles.statusText}>Chargement des services…</Text></View>
+          <View style={styles.statusCard}><ActivityIndicator color="#0877ED" /><Text style={styles.statusText}>Chargement des services…</Text></View>
         ) : null}
         {!loading && error ? (
           <View style={styles.statusCard}>
             <View style={styles.statusIcon}><Text style={styles.statusIconText}>+</Text></View>
-            <View style={styles.statusCopy}><Text style={styles.statusTitle}>Bienvenue chez rightCare</Text><Text style={styles.statusText}>{error}</Text></View>
+            <View style={styles.statusCopy}><Text style={styles.statusTitle}>Bienvenue chez RightCom XP</Text><Text style={styles.statusText}>{error}</Text></View>
           </View>
         ) : null}
         {!loading && !error && services.length === 0 ? (
@@ -154,7 +154,7 @@ export default function HomeScreen() {
           <Text style={styles.integrationArrow}>›</Text>
         </Pressable>
 
-        <Text style={styles.footer}>rightCare · Votre santé mérite toute notre attention.</Text>
+        <Text style={styles.footer}>RightCom XP · La réservation, simplement.</Text>
       </ScrollView>
     </SafeAreaView>
   );
@@ -171,68 +171,68 @@ function QuickAction(props: { icon: string; title: string; subtitle: string; onP
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: '#f7faf9' },
+  safeArea: { flex: 1, backgroundColor: '#FFFFFF' },
   page: { paddingHorizontal: 20, paddingTop: 8, paddingBottom: 32, gap: 22 },
   topBar: { alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between' },
   brandRow: { alignItems: 'center', flexDirection: 'row', gap: 10 },
-  brandMark: { alignItems: 'center', backgroundColor: '#087f70', borderRadius: 13, height: 40, justifyContent: 'center', width: 40 },
+  brandMark: { alignItems: 'center', backgroundColor: '#0877ED', borderRadius: 13, height: 40, justifyContent: 'center', width: 40 },
   brandMarkText: { color: '#fff', fontSize: 30, fontWeight: '300', lineHeight: 34 },
-  brandName: { color: '#173d3a', fontSize: 18, fontWeight: '800', letterSpacing: -0.5 },
-  brandCaption: { color: '#819591', fontSize: 11, marginTop: 1 },
-  avatar: { alignItems: 'center', backgroundColor: '#e2f0eb', borderRadius: 22, height: 42, justifyContent: 'center', width: 42 },
-  avatarText: { color: '#087f70', fontSize: 15, fontWeight: '800' },
-  hero: { backgroundColor: '#e7f4ef', borderRadius: 26, minHeight: 232, overflow: 'hidden', padding: 22 },
+  brandName: { color: '#17192F', fontSize: 18, fontWeight: '800', letterSpacing: -0.5 },
+  brandCaption: { color: '#8A91A3', fontSize: 11, marginTop: 1 },
+  avatar: { alignItems: 'center', backgroundColor: '#EAF4FF', borderRadius: 22, height: 42, justifyContent: 'center', width: 42 },
+  avatarText: { color: '#0877ED', fontSize: 15, fontWeight: '800' },
+  hero: { backgroundColor: '#EAF4FF', borderRadius: 26, minHeight: 232, overflow: 'hidden', padding: 22 },
   heroCopy: { maxWidth: '76%', zIndex: 2 },
-  heroEyebrow: { color: '#087f70', fontSize: 10, fontWeight: '800', letterSpacing: 1.1 },
-  heroTitle: { color: '#173d3a', fontSize: 26, fontWeight: '800', letterSpacing: -0.8, lineHeight: 31, marginTop: 10 },
-  heroText: { color: '#617b76', fontSize: 12, lineHeight: 18, marginTop: 8 },
-  heroButton: { alignItems: 'center', alignSelf: 'flex-start', backgroundColor: '#087f70', borderRadius: 12, flexDirection: 'row', gap: 12, marginTop: 17, paddingHorizontal: 14, paddingVertical: 11 },
+  heroEyebrow: { color: '#0877ED', fontSize: 10, fontWeight: '800', letterSpacing: 1.1 },
+  heroTitle: { color: '#17192F', fontSize: 26, fontWeight: '800', letterSpacing: -0.8, lineHeight: 31, marginTop: 10 },
+  heroText: { color: '#68738A', fontSize: 12, lineHeight: 18, marginTop: 8 },
+  heroButton: { alignItems: 'center', alignSelf: 'flex-start', backgroundColor: '#0877ED', borderRadius: 12, flexDirection: 'row', gap: 12, marginTop: 17, paddingHorizontal: 14, paddingVertical: 11 },
   heroButtonText: { color: '#fff', fontSize: 12, fontWeight: '700' },
   heroArrow: { color: '#fff', fontSize: 20, lineHeight: 20 },
   heroArt: { height: 135, position: 'absolute', right: -2, top: 52, width: 115 },
-  artCircle: { backgroundColor: '#c6e6da', borderRadius: 58, height: 116, position: 'absolute', right: 2, top: 12, width: 116 },
+  artCircle: { backgroundColor: '#D6E9FF', borderRadius: 58, height: 116, position: 'absolute', right: 2, top: 12, width: 116 },
   artCross: { alignItems: 'center', backgroundColor: '#fff', borderRadius: 15, elevation: 3, height: 48, justifyContent: 'center', position: 'absolute', right: 15, top: 40, width: 48 },
-  artCrossText: { color: '#087f70', fontSize: 38, fontWeight: '300', lineHeight: 44 },
+  artCrossText: { color: '#0877ED', fontSize: 38, fontWeight: '300', lineHeight: 44 },
   artHeart: { alignItems: 'center', backgroundColor: '#f4b5a8', borderRadius: 18, height: 36, justifyContent: 'center', left: 0, position: 'absolute', top: 85, width: 36 },
   artHeartText: { color: '#fff', fontSize: 17 },
-  artDot: { backgroundColor: '#087f70', borderRadius: 5, height: 10, position: 'absolute', right: 3, top: 2, width: 10 },
+  artDot: { backgroundColor: '#0877ED', borderRadius: 5, height: 10, position: 'absolute', right: 3, top: 2, width: 10 },
   quickRow: { flexDirection: 'row', gap: 10 },
-  quickAction: { alignItems: 'center', backgroundColor: '#fff', borderColor: '#edf2ef', borderRadius: 17, borderWidth: 1, flex: 1, flexDirection: 'row', gap: 9, minHeight: 77, paddingHorizontal: 10 },
-  quickIcon: { alignItems: 'center', backgroundColor: '#f0f7f4', borderRadius: 12, height: 36, justifyContent: 'center', width: 36 },
-  quickIconText: { color: '#087f70', fontSize: 18, fontWeight: '700' },
+  quickAction: { alignItems: 'center', backgroundColor: '#fff', borderColor: '#E8ECF3', borderRadius: 17, borderWidth: 1, flex: 1, flexDirection: 'row', gap: 9, minHeight: 77, paddingHorizontal: 10 },
+  quickIcon: { alignItems: 'center', backgroundColor: '#EEF5FF', borderRadius: 12, height: 36, justifyContent: 'center', width: 36 },
+  quickIconText: { color: '#0877ED', fontSize: 18, fontWeight: '700' },
   quickCopy: { flex: 1 },
-  quickTitle: { color: '#254743', fontSize: 11, fontWeight: '700' },
-  quickSubtitle: { color: '#91a19d', fontSize: 9, marginTop: 4 },
-  quickArrow: { color: '#91a19d', fontSize: 20 },
+  quickTitle: { color: '#17192F', fontSize: 11, fontWeight: '700' },
+  quickSubtitle: { color: '#8A91A3', fontSize: 9, marginTop: 4 },
+  quickArrow: { color: '#8A91A3', fontSize: 20 },
   sectionHeading: { alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between', marginBottom: -9 },
-  sectionTitle: { color: '#173d3a', fontSize: 18, fontWeight: '800', letterSpacing: -0.4 },
-  sectionSubtitle: { color: '#8a9b97', fontSize: 11, marginTop: 4 },
-  seeAll: { color: '#087f70', fontSize: 12, fontWeight: '700' },
-  statusCard: { alignItems: 'center', backgroundColor: '#fff', borderColor: '#edf2ef', borderRadius: 16, borderWidth: 1, flexDirection: 'row', gap: 12, padding: 15 },
-  statusIcon: { alignItems: 'center', backgroundColor: '#e7f4ef', borderRadius: 14, height: 42, justifyContent: 'center', width: 42 },
-  statusIconText: { color: '#087f70', fontSize: 28 },
+  sectionTitle: { color: '#17192F', fontSize: 18, fontWeight: '800', letterSpacing: -0.4 },
+  sectionSubtitle: { color: '#8A91A3', fontSize: 11, marginTop: 4 },
+  seeAll: { color: '#0877ED', fontSize: 12, fontWeight: '700' },
+  statusCard: { alignItems: 'center', backgroundColor: '#fff', borderColor: '#E8ECF3', borderRadius: 16, borderWidth: 1, flexDirection: 'row', gap: 12, padding: 15 },
+  statusIcon: { alignItems: 'center', backgroundColor: '#EAF4FF', borderRadius: 14, height: 42, justifyContent: 'center', width: 42 },
+  statusIconText: { color: '#0877ED', fontSize: 28 },
   statusCopy: { flex: 1, gap: 4 },
-  statusTitle: { color: '#254743', fontSize: 13, fontWeight: '700' },
-  statusText: { color: '#819591', fontSize: 11, lineHeight: 16 },
+  statusTitle: { color: '#17192F', fontSize: 13, fontWeight: '700' },
+  statusText: { color: '#8A91A3', fontSize: 11, lineHeight: 16 },
   serviceGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginTop: -10 },
-  serviceCard: { backgroundColor: '#fff', borderColor: '#edf2ef', borderRadius: 17, borderWidth: 1, minHeight: 130, padding: 13, width: '48%' },
+  serviceCard: { backgroundColor: '#fff', borderColor: '#E8ECF3', borderRadius: 17, borderWidth: 1, minHeight: 130, padding: 13, width: '48%' },
   serviceIcon: { alignItems: 'center', borderRadius: 13, height: 40, justifyContent: 'center', marginBottom: 11, width: 40 },
-  serviceSymbol: { color: '#286d60', fontSize: 22, fontWeight: '600' },
-  serviceName: { color: '#254743', fontSize: 12, fontWeight: '700' },
-  serviceMeta: { color: '#91a19d', fontSize: 9, marginTop: 5 },
-  widgetBanner: { backgroundColor: '#173d3a', borderRadius: 20, padding: 19 },
-  widgetBadge: { alignSelf: 'flex-start', backgroundColor: '#2b5b54', borderRadius: 20, paddingHorizontal: 10, paddingVertical: 5 },
-  widgetBadgeText: { color: '#bfe7d7', fontSize: 10, fontWeight: '700' },
+  serviceSymbol: { color: '#0877ED', fontSize: 22, fontWeight: '600' },
+  serviceName: { color: '#17192F', fontSize: 12, fontWeight: '700' },
+  serviceMeta: { color: '#8A91A3', fontSize: 9, marginTop: 5 },
+  widgetBanner: { backgroundColor: '#17192F', borderRadius: 20, padding: 19 },
+  widgetBadge: { alignSelf: 'flex-start', backgroundColor: '#1B4F91', borderRadius: 20, paddingHorizontal: 10, paddingVertical: 5 },
+  widgetBadgeText: { color: '#D5E9FF', fontSize: 10, fontWeight: '700' },
   widgetTitle: { color: '#fff', fontSize: 17, fontWeight: '800', marginTop: 12 },
   widgetDescription: { color: '#bed2cc', fontSize: 11, lineHeight: 17, marginTop: 5 },
   widgetButton: { alignSelf: 'flex-start', marginTop: 12 },
-  widgetButtonText: { color: '#9ee1c5', fontSize: 11, fontWeight: '700' },
-  integrationLink: { alignItems: 'center', backgroundColor: '#fff', borderColor: '#edf2ef', borderRadius: 16, borderWidth: 1, flexDirection: 'row', gap: 11, padding: 13 },
-  integrationMark: { alignItems: 'center', backgroundColor: '#e7f4ef', borderRadius: 12, height: 38, justifyContent: 'center', width: 38 },
-  integrationMarkText: { color: '#087f70', fontSize: 15, fontWeight: '800' },
+  widgetButtonText: { color: '#70C7F5', fontSize: 11, fontWeight: '700' },
+  integrationLink: { alignItems: 'center', backgroundColor: '#fff', borderColor: '#E8ECF3', borderRadius: 16, borderWidth: 1, flexDirection: 'row', gap: 11, padding: 13 },
+  integrationMark: { alignItems: 'center', backgroundColor: '#EAF4FF', borderRadius: 12, height: 38, justifyContent: 'center', width: 38 },
+  integrationMarkText: { color: '#0877ED', fontSize: 15, fontWeight: '800' },
   integrationCopy: { flex: 1, gap: 3 },
-  integrationTitle: { color: '#254743', fontSize: 12, fontWeight: '700' },
-  integrationSubtitle: { color: '#91a19d', fontSize: 10 },
-  integrationArrow: { color: '#91a19d', fontSize: 20 },
-  footer: { color: '#9aa9a5', fontSize: 10, textAlign: 'center' },
+  integrationTitle: { color: '#17192F', fontSize: 12, fontWeight: '700' },
+  integrationSubtitle: { color: '#8A91A3', fontSize: 10 },
+  integrationArrow: { color: '#8A91A3', fontSize: 20 },
+  footer: { color: '#8A91A3', fontSize: 10, textAlign: 'center' },
 });
