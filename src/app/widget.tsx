@@ -18,8 +18,8 @@ function widgetHtml(publicKey: string, company: string, sdkUrl: string) {
   return `<!doctype html>
 <html lang="fr"><head><meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-<style>html,body,#righttime-root{height:100%;min-height:100%;width:100%;margin:0;padding:0;background:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}#message{padding:20px;color:#71827e;font-size:14px}</style>
-</head><body><div id="righttime-root"><div id="message">Préparation de vos disponibilités…</div></div>
+<style>html,body,#righttime-root{height:100%;min-height:100%;width:100%;margin:0;padding:0;background:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}#message{padding:20px;color:#8A91A3;font-size:14px}</style>
+</head><body><div id="righttime-root"><div id="message">Chargement du widget RightCom XP…</div></div>
 <script>
 (function(){
   var config=${config};
@@ -31,7 +31,7 @@ function widgetHtml(publicKey: string, company: string, sdkUrl: string) {
       if(!window.RightTime)throw new Error('Le service de réservation est indisponible.');
       document.getElementById('righttime-root').innerHTML='';
       window.RightTime.init({publicKey:config.publicKey,company:config.company}).mount('#righttime-root',{
-        height:'fill',locale:'fr',title:'Réservation RightCom XP',
+        height:'fill',locale:'fr',title:'RightCom XP',
         onReady:function(){send('ready')},
         onBooked:function(appointment){send('booked',appointment)},
         onError:function(error){send('error',error)}
@@ -75,14 +75,14 @@ export default function SdkWidgetScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.heading}>
-        <View style={styles.kickerPill}><Text style={styles.kicker}>VOTRE SANTÉ, NOTRE PRIORITÉ</Text></View>
-        <Text style={styles.title}>Réserver un soin</Text>
-        <Text style={styles.subtitle}>Choisissez un créneau qui vous convient auprès de nos professionnels de santé.</Text>
+        <View style={styles.kickerPill}><Text style={styles.kicker}>RIGHTCOM XP · RÉSERVATION</Text></View>
+        <Text style={styles.title}>Réserver un créneau</Text>
+        <Text style={styles.subtitle}>Réservez directement depuis le widget intégré à l’application.</Text>
       </View>
       {!ready ? (
         <View style={styles.messageCard}>
           <View style={styles.messageIcon}><Text style={styles.messageIconText}>+</Text></View>
-          <Text style={styles.messageTitle}>Les réservations arrivent bientôt</Text>
+          <Text style={styles.messageTitle}>Les réservations seront bientôt disponibles</Text>
           <Text style={styles.messageText}>Notre équipe prépare vos disponibilités. Revenez nous voir très bientôt.</Text>
         </View>
       ) : (

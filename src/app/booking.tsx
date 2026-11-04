@@ -186,7 +186,7 @@ export default function CustomBookingScreen() {
           <Text style={styles.kicker}>RIGHTCOM XP · À VOTRE ÉCOUTE</Text>
           <Text style={styles.title}>Prenez rendez-vous</Text>
           <Text style={styles.subtitle}>
-            Choisissez votre centre, le soin souhaité et un horaire qui vous convient.
+            Sélectionnez votre service, votre créneau et confirmez votre rendez-vous en quelques étapes.
           </Text>
         </View>
 
@@ -196,10 +196,10 @@ export default function CustomBookingScreen() {
           </InfoCard>
         ) : null}
 
-        {client && loadingCatalog ? <LoadingCard label="Chargement des calendriers médicaux…" /> : null}
+        {client && loadingCatalog ? <LoadingCard label="Chargement des établissements…" /> : null}
         {client && !loadingCatalog && calendars.length > 0 ? (
           <View style={styles.card}>
-            <Text style={styles.sectionTitle}>1. Choisir un centre médical</Text>
+            <Text style={styles.sectionTitle}>01  ·  Votre établissement</Text>
             <View style={styles.choiceList}>
               {calendars.map((calendar) => (
                 <ChoiceButton
@@ -215,7 +215,7 @@ export default function CustomBookingScreen() {
 
         {selectedCalendar && services.length > 0 ? (
           <View style={styles.card}>
-            <Text style={styles.sectionTitle}>2. Choisir un service</Text>
+            <Text style={styles.sectionTitle}>02  ·  Le service souhaité</Text>
             <View style={styles.choiceList}>
               {services.map((service) => (
                 <ChoiceButton
@@ -231,7 +231,7 @@ export default function CustomBookingScreen() {
             </View>
             {selectedService ? (
               <Text style={styles.muted}>
-                {selectedService.description || 'Consultation médicale'} · {selectedService.duration}
+                {selectedService.description || 'Service'} · {selectedService.duration}
                 {selectedService.durationType === 'h' ? ' h' : ' min'}
               </Text>
             ) : null}
@@ -241,7 +241,7 @@ export default function CustomBookingScreen() {
         {selectedService ? (
           <View style={styles.card}>
             <View style={styles.monthHeader}>
-              <Text style={styles.sectionTitle}>3. Choisir un créneau</Text>
+              <Text style={styles.sectionTitle}>03  ·  Date et horaire</Text>
               <View style={styles.monthControls}>
                 <Pressable onPress={() => setMonthDate((date) => new Date(date.getFullYear(), date.getMonth() - 1, 1))}>
                   <Text style={styles.monthArrow}>‹</Text>
@@ -280,7 +280,7 @@ export default function CustomBookingScreen() {
 
         {selectedSlot ? (
           <View style={styles.card}>
-            <Text style={styles.sectionTitle}>4. Vos coordonnées</Text>
+            <Text style={styles.sectionTitle}>04  ·  Vos coordonnées</Text>
             <TextInputField label="Prénom" value={firstName} onChangeText={setFirstName} placeholder="Votre prénom" />
             <TextInputField label="Nom" value={lastName} onChangeText={setLastName} placeholder="Votre nom" />
             <TextInputField label="Adresse e-mail *" value={email} onChangeText={setEmail} placeholder="nom@exemple.com" keyboardType="email-address" />
@@ -293,7 +293,7 @@ export default function CustomBookingScreen() {
 
         {error ? <InfoCard title="Une erreur est survenue" error>{error}</InfoCard> : null}
         {confirmation ? <InfoCard title="Rendez-vous confirmé" success>{confirmation}</InfoCard> : null}
-        {agents.length > 0 ? <Text style={styles.footer}>{agents.length} professionnel(s) disponible(s)</Text> : null}
+        {agents.length > 0 ? <Text style={styles.footer}>{agents.length} intervenant(s) disponible(s)</Text> : null}
       </ScrollView>
     </SafeAreaView>
   );
@@ -356,34 +356,34 @@ function LoadingCard(props: { label: string }) {
 const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: '#FFFFFF' },
   page: { padding: 20, paddingTop: 12, paddingBottom: 40, gap: 14 },
-  hero: { backgroundColor: '#EAF4FF', borderRadius: 22, padding: 22, gap: 8 },
-  kicker: { color: '#0877ED', fontSize: 10, fontWeight: '800', letterSpacing: 1 },
-  title: { color: '#17192F', fontSize: 26, fontWeight: '800', letterSpacing: -0.6 },
-  subtitle: { color: '#68738A', fontSize: 13, lineHeight: 20 },
+  hero: { backgroundColor: '#0877ED', borderRadius: 22, padding: 22, gap: 8 },
+  kicker: { color: '#D5E9FF', fontSize: 12, fontWeight: '800', letterSpacing: 1 },
+  title: { color: '#FFFFFF', fontSize: 32, fontWeight: '800', letterSpacing: -0.8 },
+  subtitle: { color: '#EAF4FF', fontSize: 16, lineHeight: 25 },
   card: { backgroundColor: '#fff', borderColor: '#E8ECF3', borderRadius: 18, borderWidth: 1, padding: 17, gap: 12 },
-  sectionTitle: { color: '#17192F', fontSize: 16, fontWeight: '800' },
+  sectionTitle: { color: '#17192F', fontSize: 19, fontWeight: '800' },
   choiceList: { gap: 8 },
-  choice: { backgroundColor: '#f7f9fc', borderColor: '#dce4ee', borderRadius: 10, borderWidth: 1, padding: 12 },
+  choice: { backgroundColor: '#F4F4F5', borderColor: '#E1E6EF', borderRadius: 12, borderWidth: 1, padding: 14 },
   choiceSelected: { backgroundColor: '#EAF4FF', borderColor: '#0877ED' },
-  choiceText: { color: '#34465a', fontSize: 13, fontWeight: '600' },
+  choiceText: { color: '#17192F', fontSize: 16, fontWeight: '600' },
   choiceTextSelected: { color: '#0877ED' },
-  muted: { color: '#708197', fontSize: 12, lineHeight: 18 },
+  muted: { color: '#8A91A3', fontSize: 14, lineHeight: 22 },
   monthHeader: { gap: 10 },
   monthControls: { alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between' },
   monthArrow: { color: '#0877ED', fontSize: 30, paddingHorizontal: 8 },
-  monthLabel: { color: '#34465a', fontSize: 14, fontWeight: '700', textTransform: 'capitalize' },
+  monthLabel: { color: '#17192F', fontSize: 16, fontWeight: '700', textTransform: 'capitalize' },
   field: { gap: 6 },
-  label: { color: '#34465a', fontSize: 12, fontWeight: '700' },
-  input: { backgroundColor: '#f8faf9', borderColor: '#DCE6F2', borderRadius: 12, borderWidth: 1, color: '#17192F', fontSize: 14, minHeight: 48, paddingHorizontal: 12 },
-  bookButton: { alignItems: 'center', backgroundColor: '#0877ED', borderRadius: 12, minHeight: 48, justifyContent: 'center', marginTop: 4 },
-  bookButtonText: { color: '#fff', fontSize: 14, fontWeight: '700' },
+  label: { color: '#17192F', fontSize: 16, fontWeight: '700' },
+  input: { backgroundColor: '#F4F4F5', borderColor: '#DCE6F2', borderRadius: 12, borderWidth: 1, color: '#17192F', fontSize: 14, minHeight: 52, paddingHorizontal: 14 },
+  bookButton: { alignItems: 'center', backgroundColor: '#0877ED', borderRadius: 13, minHeight: 52, justifyContent: 'center', marginTop: 4 },
+  bookButtonText: { color: '#fff', fontSize: 16, fontWeight: '700' },
   disabled: { opacity: 0.45 },
   infoCard: { backgroundColor: '#fff', borderColor: '#E8ECF3', borderRadius: 15, borderWidth: 1, padding: 16, gap: 5 },
-  errorCard: { backgroundColor: '#fff0ef' },
-  successCard: { backgroundColor: '#eaf8f1' },
-  infoTitle: { color: '#17192F', fontSize: 14, fontWeight: '700' },
-  errorText: { color: '#a52820' },
-  successText: { color: '#18744a' },
+  errorCard: { backgroundColor: '#FFF1F0' },
+  successCard: { backgroundColor: '#EAF4FF' },
+  infoTitle: { color: '#17192F', fontSize: 16, fontWeight: '700' },
+  errorText: { color: '#B42318' },
+  successText: { color: '#0877ED' },
   loadingCard: { alignItems: 'center', backgroundColor: '#fff', borderColor: '#E8ECF3', borderRadius: 15, borderWidth: 1, flexDirection: 'row', gap: 12, padding: 16 },
-  footer: { color: '#7a899b', fontSize: 10, textAlign: 'center' },
+  footer: { color: '#8A91A3', fontSize: 10, textAlign: 'center' },
 });

@@ -22,13 +22,13 @@ export default function HostedWebViewScreen() {
       <View style={styles.heading}>
         <View style={styles.badge}><Text style={styles.badgeText}>RIGHTCOM XP</Text></View>
         <Text style={styles.title}>Réservation en ligne</Text>
-        <Text style={styles.subtitle}>Retrouvez notre espace de réservation directement dans l’application.</Text>
+        <Text style={styles.subtitle}>Accédez à l’espace de réservation sans quitter votre application.</Text>
       </View>
       {!validUrl ? (
         <View style={styles.emptyCard}>
           <View style={styles.emptyIcon}><Text style={styles.plus}>+</Text></View>
-          <Text style={styles.emptyTitle}>Notre espace arrive bientôt</Text>
-          <Text style={styles.body}>Les réservations en ligne seront accessibles ici très prochainement.</Text>
+          <Text style={styles.emptyTitle}>Votre espace de réservation</Text>
+          <Text style={styles.body}>La page de réservation sera accessible ici dès que le service sera configuré.</Text>
         </View>
       ) : failed ? (
         <View style={styles.emptyCard}>
@@ -64,11 +64,11 @@ export default function HostedWebViewScreen() {
 
 const styles = StyleSheet.create({
   safeArea: { backgroundColor: '#FFFFFF', flex: 1, gap: 14, padding: 18 },
-  heading: { backgroundColor: '#EAF4FF', borderRadius: 22, gap: 9, padding: 20 },
-  badge: { alignSelf: 'flex-start', backgroundColor: '#DCEBFF', borderRadius: 20, paddingHorizontal: 10, paddingVertical: 5 },
-  badgeText: { color: '#0877ED', fontSize: 9, fontWeight: '800', letterSpacing: 1 },
-  title: { color: '#17192F', fontSize: 24, fontWeight: '800', letterSpacing: -0.6 },
-  subtitle: { color: '#68738A', fontSize: 12, lineHeight: 18 },
+  heading: { backgroundColor: '#0877ED', borderRadius: 22, gap: 9, padding: 20 },
+  badge: { alignSelf: 'flex-start', backgroundColor: '#1B4F91', borderRadius: 20, paddingHorizontal: 10, paddingVertical: 5 },
+  badgeText: { color: '#FFFFFF', fontSize: 9, fontWeight: '800', letterSpacing: 1 },
+  title: { color: '#FFFFFF', fontSize: 24, fontWeight: '800', letterSpacing: -0.6 },
+  subtitle: { color: '#EAF4FF', fontSize: 12, lineHeight: 18 },
   frame: { backgroundColor: '#fff', borderColor: '#E8ECF3', borderRadius: 18, borderWidth: 1, flex: 1, overflow: 'hidden' },
   webview: { backgroundColor: 'transparent', flex: 1 },
   loading: { ...StyleSheet.absoluteFillObject, alignItems: 'center', backgroundColor: '#fff', gap: 10, justifyContent: 'center', zIndex: 1 },
