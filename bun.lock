@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "rightcare",
+      "name": "rightcom-xp",
       "dependencies": {
         "@expo/ui": "~58.0.27",
         "@rightcom/righttime-sdk": "file:../sdk-frontend-feature-SE-e2e/packages/sdk",
