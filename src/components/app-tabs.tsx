@@ -1,28 +1,34 @@
 import { NativeTabs } from 'expo-router/native-tabs';
-import { useColorScheme } from 'react-native';
-
-import { Colors } from '@/constants/theme';
 
 export default function AppTabs() {
-  const scheme = useColorScheme();
-  const colors = Colors[scheme === 'dark' ? 'dark' : 'light'];
-
   return (
     <NativeTabs
-      backgroundColor={colors.background}
-      indicatorColor={colors.backgroundElement}
-      labelStyle={{ selected: { color: colors.text } }}>
+      backgroundColor="#ffffff"
+      tintColor="#087f70"
+      indicatorColor="#dcefe8"
+      labelStyle={{ default: { color: '#82918d' }, selected: { color: '#087f70', fontWeight: '700' } }}>
       <NativeTabs.Trigger name="index">
-        <NativeTabs.Trigger.Label>Home</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Label>Accueil</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
+          sf={{ default: 'house', selected: 'house.fill' }}
           src={require('@/assets/images/tabIcons/home.png')}
           renderingMode="template"
         />
       </NativeTabs.Trigger>
 
-      <NativeTabs.Trigger name="explore">
-        <NativeTabs.Trigger.Label>Explore</NativeTabs.Trigger.Label>
+      <NativeTabs.Trigger name="booking">
+        <NativeTabs.Trigger.Label>Réserver</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
+          sf={{ default: 'calendar', selected: 'calendar' }}
+          src={require('@/assets/images/tabIcons/explore.png')}
+          renderingMode="template"
+        />
+      </NativeTabs.Trigger>
+
+      <NativeTabs.Trigger name="widget">
+        <NativeTabs.Trigger.Label>Widget</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon
+          sf={{ default: 'heart', selected: 'heart.fill' }}
           src={require('@/assets/images/tabIcons/explore.png')}
           renderingMode="template"
         />

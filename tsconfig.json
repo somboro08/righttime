@@ -2,7 +2,11 @@
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
     "strict": true,
+    "allowImportingTsExtensions": true,
     "paths": {
+      "@rightcom/righttime-sdk": [
+        "../sdk-frontend-feature-SE-e2e/packages/sdk/src/index.ts"
+      ],
       "@/*": [
         "./src/*"
       ],

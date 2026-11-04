@@ -1,204 +1,238 @@
-import { createRightTimeClient } from '@rightcom/righttime-sdk';
-import { useState } from 'react';
+import type { Service } from '@rightcom/righttime-sdk';
+import { useRouter } from 'expo-router';
+import { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   Pressable,
   ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-const DEFAULT_API_URL =
-  process.env.EXPO_PUBLIC_RIGHTTIME_API_URL ?? 'https://api.righttime.com/v1';
+import { useRightCare } from '@/lib/rightcare-context';
+
+interface ListedService {
+  service: Service;
+  location: string;
+}
+
+const serviceColors = ['#dff4ed', '#e4efff', '#fff0df', '#f2eaff'];
+const serviceSymbols = ['✚', '♡', '◉', '✦'];
 
 export default function HomeScreen() {
-  const [publicKey, setPublicKey] = useState('');
-  const [company, setCompany] = useState('');
-  const [apiUrl, setApiUrl] = useState(DEFAULT_API_URL);
+  const router = useRouter();
+  const { client } = useRightCare();
+  const [companyName, setCompanyName] = useState('Rightcom Santé');
+  const [services, setServices] = useState<ListedService[]>([]);
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState('');
   const [error, setError] = useState('');
 
-  async function request(endpoint: 'company' | 'calendars') {
+  useEffect(() => {
+    if (!client) {
+      setServices([]);
+      setError('Les services ne sont pas disponibles pour le moment.');
+      return;
+    }
+
+    let mounted = true;
     setLoading(true);
     setError('');
-    setResult('');
-
-    try {
-      const client = createRightTimeClient({
-        publicKey: publicKey.trim(),
-        company: company.trim(),
-        baseUrl: apiUrl.trim(),
+    Promise.all([client.getCompany(), client.listCalendars()])
+      .then(([companyResponse, calendarResponse]) => {
+        if (!mounted) return;
+        setCompanyName(companyResponse.result.companyInfo.displayName || 'Rightcom Santé');
+        setServices(
+          calendarResponse.result.flatMap((calendar) =>
+            (calendar.status ? calendar.services ?? [] : [])
+              .filter((service) => service.active)
+              .map((service) => ({ service, location: calendar.businessLocationName })),
+          ),
+        );
+      })
+      .catch((cause: unknown) => {
+        if (mounted) setError(cause instanceof Error ? cause.message : 'Une erreur est survenue.');
+      })
+      .finally(() => {
+        if (mounted) setLoading(false);
       });
-      const data =
-        endpoint === 'company'
-          ? await client.getCompany()
-          : await client.listCalendars();
-      setResult(JSON.stringify(data, null, 2));
-    } catch (cause) {
-      setError(cause instanceof Error ? cause.message : String(cause));
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  const disabled = loading || !publicKey.trim() || !company.trim();
+    return () => {
+      mounted = false;
+    };
+  }, [client]);
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.page} keyboardShouldPersistTaps="handled">
-        <View style={styles.header}>
-          <Text style={styles.eyebrow}>EXPO · REACT NATIVE · BUN</Text>
-          <Text style={styles.title}>RightTime SDK</Text>
-          <Text style={styles.subtitle}>
-            Démo autonome pour tester les appels API du SDK depuis une app native.
-          </Text>
+      <ScrollView contentContainerStyle={styles.page} showsVerticalScrollIndicator={false}>
+        <View style={styles.topBar}>
+          <View style={styles.brandRow}>
+            <View style={styles.brandMark}><Text style={styles.brandMarkText}>+</Text></View>
+            <View>
+              <Text style={styles.brandName}>rightCare</Text>
+              <Text style={styles.brandCaption}>{companyName}</Text>
+            </View>
+          </View>
+          <Pressable accessibilityLabel="Profil" style={styles.avatar}>
+            <Text style={styles.avatarText}>R</Text>
+          </Pressable>
         </View>
 
-        <View style={styles.card}>
-          <Text style={styles.sectionTitle}>Configuration</Text>
-          <Field
-            label="Clé publique"
-            value={publicKey}
-            onChangeText={setPublicKey}
-            placeholder="pk_…"
-          />
-          <Field
-            label="Entreprise"
-            value={company}
-            onChangeText={setCompany}
-            placeholder="mon-entreprise"
-          />
-          <Field
-            label="URL de l’API"
-            value={apiUrl}
-            onChangeText={setApiUrl}
-            placeholder="https://api.righttime.com/v1"
-            keyboardType="url"
-          />
-          <View style={styles.actions}>
-            <ActionButton
-              label="Charger l’entreprise"
-              disabled={disabled}
-              onPress={() => void request('company')}
-            />
-            <ActionButton
-              label="Charger les calendriers"
-              disabled={disabled}
-              onPress={() => void request('calendars')}
-              secondary
-            />
+        <View style={styles.hero}>
+          <View style={styles.heroCopy}>
+            <Text style={styles.heroEyebrow}>PRENEZ SOIN DE VOUS</Text>
+            <Text style={styles.heroTitle}>La santé, en toute simplicité.</Text>
+            <Text style={styles.heroText}>Trouvez le bon professionnel et choisissez votre créneau.</Text>
+            <Pressable accessibilityRole="button" onPress={() => router.push('/widget' as never)} style={styles.heroButton}>
+              <Text style={styles.heroButtonText}>Prendre rendez-vous</Text>
+              <Text style={styles.heroArrow}>›</Text>
+            </Pressable>
           </View>
-          {loading ? <ActivityIndicator color="#0879d1" style={styles.spinner} /> : null}
+          <View style={styles.heroArt}>
+            <View style={styles.artCircle} />
+            <View style={styles.artCross}><Text style={styles.artCrossText}>+</Text></View>
+            <View style={styles.artHeart}><Text style={styles.artHeartText}>♥</Text></View>
+            <View style={styles.artDot} />
+          </View>
         </View>
 
-        {error ? (
-          <View style={styles.errorBox}>
-            <Text style={styles.errorTitle}>La requête a échoué</Text>
-            <Text style={styles.errorText}>{error}</Text>
+        <View style={styles.quickRow}>
+          <QuickAction icon="▦" title="Parcours personnalisé" subtitle="Réservation avec le SDK" onPress={() => router.push('/booking' as never)} />
+          <QuickAction icon="◷" title="Page web intégrée" subtitle="Réserver dans la WebView" onPress={() => router.push('/webview' as never)} />
+        </View>
+
+        <View style={styles.sectionHeading}>
+          <View>
+            <Text style={styles.sectionTitle}>Nos spécialités</Text>
+            <Text style={styles.sectionSubtitle}>Des professionnels à votre écoute</Text>
+          </View>
+          <Pressable onPress={() => router.push('/booking' as never)}>
+            <Text style={styles.seeAll}>Tout voir</Text>
+          </Pressable>
+        </View>
+
+        {loading ? (
+          <View style={styles.statusCard}><ActivityIndicator color="#087f70" /><Text style={styles.statusText}>Chargement des services…</Text></View>
+        ) : null}
+        {!loading && error ? (
+          <View style={styles.statusCard}>
+            <View style={styles.statusIcon}><Text style={styles.statusIconText}>+</Text></View>
+            <View style={styles.statusCopy}><Text style={styles.statusTitle}>Bienvenue chez rightCare</Text><Text style={styles.statusText}>{error}</Text></View>
           </View>
         ) : null}
-
-        {result ? (
-          <View style={styles.card}>
-            <Text style={styles.sectionTitle}>Réponse du SDK</Text>
-            <Text selectable style={styles.code}>
-              {result}
-            </Text>
-          </View>
+        {!loading && !error && services.length === 0 ? (
+          <View style={styles.statusCard}><Text style={styles.statusText}>Les spécialités seront bientôt disponibles.</Text></View>
         ) : null}
 
-        <Text style={styles.note}>
-          Le client API fonctionne en React Native. mount() et launcher() sont réservés au navigateur.
-        </Text>
+        <View style={styles.serviceGrid}>
+          {services.slice(0, 4).map(({ service, location }, index) => (
+            <Pressable key={`${location}-${service.objectId}`} onPress={() => router.push('/widget' as never)} style={styles.serviceCard}>
+              <View style={[styles.serviceIcon, { backgroundColor: serviceColors[index % serviceColors.length] }]}>
+                <Text style={styles.serviceSymbol}>{serviceSymbols[index % serviceSymbols.length]}</Text>
+              </View>
+              <Text numberOfLines={1} style={styles.serviceName}>{service.name}</Text>
+              <Text numberOfLines={1} style={styles.serviceMeta}>{service.duration}{service.durationType === 'h' ? ' h' : ' min'} · {location}</Text>
+            </Pressable>
+          ))}
+        </View>
+
+        <View style={styles.widgetBanner}>
+          <View style={styles.widgetBadge}><Text style={styles.widgetBadgeText}>rightTime</Text></View>
+          <Text style={styles.widgetTitle}>Un rendez-vous en quelques instants</Text>
+          <Text style={styles.widgetDescription}>Consultez les créneaux et réservez en toute simplicité.</Text>
+          <Pressable onPress={() => router.push('/widget' as never)} style={styles.widgetButton}>
+            <Text style={styles.widgetButtonText}>Découvrir le widget de réservation  ›</Text>
+          </Pressable>
+        </View>
+
+        <Pressable onPress={() => router.push('/integrations' as never)} style={styles.integrationLink}>
+          <View style={styles.integrationMark}><Text style={styles.integrationMarkText}>3</Text></View>
+          <View style={styles.integrationCopy}>
+            <Text style={styles.integrationTitle}>Explorer les intégrations</Text>
+            <Text style={styles.integrationSubtitle}>Comparez trois parcours de réservation RightTime</Text>
+          </View>
+          <Text style={styles.integrationArrow}>›</Text>
+        </Pressable>
+
+        <Text style={styles.footer}>rightCare · Votre santé mérite toute notre attention.</Text>
       </ScrollView>
     </SafeAreaView>
   );
 }
 
-function Field(props: {
-  label: string;
-  value: string;
-  onChangeText: (value: string) => void;
-  placeholder: string;
-  keyboardType?: 'default' | 'url';
-}) {
+function QuickAction(props: { icon: string; title: string; subtitle: string; onPress: () => void }) {
   return (
-    <View style={styles.field}>
-      <Text style={styles.label}>{props.label}</Text>
-      <TextInput
-        value={props.value}
-        onChangeText={props.onChangeText}
-        placeholder={props.placeholder}
-        placeholderTextColor="#8794a5"
-        autoCapitalize="none"
-        autoCorrect={false}
-        keyboardType={props.keyboardType ?? 'default'}
-        style={styles.input}
-      />
-    </View>
-  );
-}
-
-function ActionButton(props: {
-  label: string;
-  disabled: boolean;
-  onPress: () => void;
-  secondary?: boolean;
-}) {
-  return (
-    <Pressable
-      accessibilityRole="button"
-      disabled={props.disabled}
-      onPress={props.onPress}
-      style={({ pressed }) => [
-        styles.button,
-        props.secondary && styles.secondaryButton,
-        props.disabled && styles.disabledButton,
-        pressed && !props.disabled && styles.pressedButton,
-      ]}>
-      <Text style={[styles.buttonText, props.secondary && styles.secondaryButtonText]}>
-        {props.label}
-      </Text>
+    <Pressable onPress={props.onPress} style={styles.quickAction}>
+      <View style={styles.quickIcon}><Text style={styles.quickIconText}>{props.icon}</Text></View>
+      <View style={styles.quickCopy}><Text style={styles.quickTitle}>{props.title}</Text><Text style={styles.quickSubtitle}>{props.subtitle}</Text></View>
+      <Text style={styles.quickArrow}>›</Text>
     </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: '#f2f6fb' },
-  page: { flexGrow: 1, padding: 20, paddingTop: 24, gap: 16 },
-  header: { backgroundColor: '#102b49', borderRadius: 20, padding: 22, gap: 8 },
-  eyebrow: { color: '#8bc9ff', fontSize: 11, fontWeight: '700', letterSpacing: 1.2 },
-  title: { color: '#fff', fontSize: 28, fontWeight: '800' },
-  subtitle: { color: '#d2e3f4', fontSize: 15, lineHeight: 22 },
-  card: { backgroundColor: '#fff', borderRadius: 18, padding: 18, gap: 14 },
-  sectionTitle: { color: '#102b49', fontSize: 18, fontWeight: '700' },
-  field: { gap: 7 },
-  label: { color: '#34465a', fontSize: 13, fontWeight: '600' },
-  input: {
-    backgroundColor: '#f7f9fc',
-    borderColor: '#dce4ee',
-    borderRadius: 10,
-    borderWidth: 1,
-    color: '#102b49',
-    fontSize: 15,
-    minHeight: 48,
-    paddingHorizontal: 12,
-  },
-  actions: { gap: 10, marginTop: 4 },
-  button: { alignItems: 'center', backgroundColor: '#0879d1', borderRadius: 10, padding: 14 },
-  secondaryButton: { backgroundColor: '#e7f2fc' },
-  disabledButton: { opacity: 0.45 },
-  pressedButton: { opacity: 0.8 },
-  buttonText: { color: '#fff', fontSize: 14, fontWeight: '700' },
-  secondaryButtonText: { color: '#075a9b' },
-  spinner: { padding: 6 },
-  errorBox: { backgroundColor: '#fff0ef', borderColor: '#f4b7b2', borderRadius: 14, borderWidth: 1, padding: 16, gap: 6 },
-  errorTitle: { color: '#a52820', fontSize: 15, fontWeight: '700' },
-  errorText: { color: '#7d2a24', fontSize: 14, lineHeight: 20 },
-  code: { color: '#243449', fontFamily: 'monospace', fontSize: 12, lineHeight: 18 },
-  note: { color: '#66778b', fontSize: 12, lineHeight: 18, paddingHorizontal: 4, paddingBottom: 24 },
+  safeArea: { flex: 1, backgroundColor: '#f7faf9' },
+  page: { paddingHorizontal: 20, paddingTop: 8, paddingBottom: 32, gap: 22 },
+  topBar: { alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between' },
+  brandRow: { alignItems: 'center', flexDirection: 'row', gap: 10 },
+  brandMark: { alignItems: 'center', backgroundColor: '#087f70', borderRadius: 13, height: 40, justifyContent: 'center', width: 40 },
+  brandMarkText: { color: '#fff', fontSize: 30, fontWeight: '300', lineHeight: 34 },
+  brandName: { color: '#173d3a', fontSize: 18, fontWeight: '800', letterSpacing: -0.5 },
+  brandCaption: { color: '#819591', fontSize: 11, marginTop: 1 },
+  avatar: { alignItems: 'center', backgroundColor: '#e2f0eb', borderRadius: 22, height: 42, justifyContent: 'center', width: 42 },
+  avatarText: { color: '#087f70', fontSize: 15, fontWeight: '800' },
+  hero: { backgroundColor: '#e7f4ef', borderRadius: 26, minHeight: 232, overflow: 'hidden', padding: 22 },
+  heroCopy: { maxWidth: '76%', zIndex: 2 },
+  heroEyebrow: { color: '#087f70', fontSize: 10, fontWeight: '800', letterSpacing: 1.1 },
+  heroTitle: { color: '#173d3a', fontSize: 26, fontWeight: '800', letterSpacing: -0.8, lineHeight: 31, marginTop: 10 },
+  heroText: { color: '#617b76', fontSize: 12, lineHeight: 18, marginTop: 8 },
+  heroButton: { alignItems: 'center', alignSelf: 'flex-start', backgroundColor: '#087f70', borderRadius: 12, flexDirection: 'row', gap: 12, marginTop: 17, paddingHorizontal: 14, paddingVertical: 11 },
+  heroButtonText: { color: '#fff', fontSize: 12, fontWeight: '700' },
+  heroArrow: { color: '#fff', fontSize: 20, lineHeight: 20 },
+  heroArt: { height: 135, position: 'absolute', right: -2, top: 52, width: 115 },
+  artCircle: { backgroundColor: '#c6e6da', borderRadius: 58, height: 116, position: 'absolute', right: 2, top: 12, width: 116 },
+  artCross: { alignItems: 'center', backgroundColor: '#fff', borderRadius: 15, elevation: 3, height: 48, justifyContent: 'center', position: 'absolute', right: 15, top: 40, width: 48 },
+  artCrossText: { color: '#087f70', fontSize: 38, fontWeight: '300', lineHeight: 44 },
+  artHeart: { alignItems: 'center', backgroundColor: '#f4b5a8', borderRadius: 18, height: 36, justifyContent: 'center', left: 0, position: 'absolute', top: 85, width: 36 },
+  artHeartText: { color: '#fff', fontSize: 17 },
+  artDot: { backgroundColor: '#087f70', borderRadius: 5, height: 10, position: 'absolute', right: 3, top: 2, width: 10 },
+  quickRow: { flexDirection: 'row', gap: 10 },
+  quickAction: { alignItems: 'center', backgroundColor: '#fff', borderColor: '#edf2ef', borderRadius: 17, borderWidth: 1, flex: 1, flexDirection: 'row', gap: 9, minHeight: 77, paddingHorizontal: 10 },
+  quickIcon: { alignItems: 'center', backgroundColor: '#f0f7f4', borderRadius: 12, height: 36, justifyContent: 'center', width: 36 },
+  quickIconText: { color: '#087f70', fontSize: 18, fontWeight: '700' },
+  quickCopy: { flex: 1 },
+  quickTitle: { color: '#254743', fontSize: 11, fontWeight: '700' },
+  quickSubtitle: { color: '#91a19d', fontSize: 9, marginTop: 4 },
+  quickArrow: { color: '#91a19d', fontSize: 20 },
+  sectionHeading: { alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between', marginBottom: -9 },
+  sectionTitle: { color: '#173d3a', fontSize: 18, fontWeight: '800', letterSpacing: -0.4 },
+  sectionSubtitle: { color: '#8a9b97', fontSize: 11, marginTop: 4 },
+  seeAll: { color: '#087f70', fontSize: 12, fontWeight: '700' },
+  statusCard: { alignItems: 'center', backgroundColor: '#fff', borderColor: '#edf2ef', borderRadius: 16, borderWidth: 1, flexDirection: 'row', gap: 12, padding: 15 },
+  statusIcon: { alignItems: 'center', backgroundColor: '#e7f4ef', borderRadius: 14, height: 42, justifyContent: 'center', width: 42 },
+  statusIconText: { color: '#087f70', fontSize: 28 },
+  statusCopy: { flex: 1, gap: 4 },
+  statusTitle: { color: '#254743', fontSize: 13, fontWeight: '700' },
+  statusText: { color: '#819591', fontSize: 11, lineHeight: 16 },
+  serviceGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginTop: -10 },
+  serviceCard: { backgroundColor: '#fff', borderColor: '#edf2ef', borderRadius: 17, borderWidth: 1, minHeight: 130, padding: 13, width: '48%' },
+  serviceIcon: { alignItems: 'center', borderRadius: 13, height: 40, justifyContent: 'center', marginBottom: 11, width: 40 },
+  serviceSymbol: { color: '#286d60', fontSize: 22, fontWeight: '600' },
+  serviceName: { color: '#254743', fontSize: 12, fontWeight: '700' },
+  serviceMeta: { color: '#91a19d', fontSize: 9, marginTop: 5 },
+  widgetBanner: { backgroundColor: '#173d3a', borderRadius: 20, padding: 19 },
+  widgetBadge: { alignSelf: 'flex-start', backgroundColor: '#2b5b54', borderRadius: 20, paddingHorizontal: 10, paddingVertical: 5 },
+  widgetBadgeText: { color: '#bfe7d7', fontSize: 10, fontWeight: '700' },
+  widgetTitle: { color: '#fff', fontSize: 17, fontWeight: '800', marginTop: 12 },
+  widgetDescription: { color: '#bed2cc', fontSize: 11, lineHeight: 17, marginTop: 5 },
+  widgetButton: { alignSelf: 'flex-start', marginTop: 12 },
+  widgetButtonText: { color: '#9ee1c5', fontSize: 11, fontWeight: '700' },
+  integrationLink: { alignItems: 'center', backgroundColor: '#fff', borderColor: '#edf2ef', borderRadius: 16, borderWidth: 1, flexDirection: 'row', gap: 11, padding: 13 },
+  integrationMark: { alignItems: 'center', backgroundColor: '#e7f4ef', borderRadius: 12, height: 38, justifyContent: 'center', width: 38 },
+  integrationMarkText: { color: '#087f70', fontSize: 15, fontWeight: '800' },
+  integrationCopy: { flex: 1, gap: 3 },
+  integrationTitle: { color: '#254743', fontSize: 12, fontWeight: '700' },
+  integrationSubtitle: { color: '#91a19d', fontSize: 10 },
+  integrationArrow: { color: '#91a19d', fontSize: 20 },
+  footer: { color: '#9aa9a5', fontSize: 10, textAlign: 'center' },
 });

@@ -1,56 +1,81 @@
-# Welcome to your Expo app 👋
+# rightCare
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Application de démonstration mobile Rightcom pour découvrir des services de santé et prendre rendez-vous. Elle montre deux intégrations de `@rightcom/righttime-sdk` : le widget RightTime dans une WebView et un parcours de réservation construit en React Native avec les API du SDK.
 
-## Get started
+L’interface est conçue comme une application destinée aux patients. Les paramètres techniques ne sont pas affichés dans l’application : ils sont fournis à l’exécution par l’environnement Expo.
 
-1. Install dependencies
+## Prérequis et démarrage
 
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **src/app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+- Bun 1.3 ou plus récent.
+- Un checkout du SDK à côté du projet : `../sdk-frontend-feature-SE-e2e/packages/sdk`.
+- Expo Go ou un émulateur Android/iOS. iOS nécessite macOS et Xcode.
 
 ```bash
-npm run reset-project
+bun install
+bun run start
 ```
 
-This command will move the starter code to the **example** directory and create a blank **src/app** directory where you can start developing.
+Lancer directement sur une plateforme : `bun run android` ou `bun run ios`.
+Après une modification de Metro ou du SDK local, vider son cache :
 
-### Other setup steps
+```bash
+bun run start -- --clear
+```
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+## Configuration RightTime
 
-## Learn more
+Ajouter ces variables au fichier `.env` local (il peut déjà contenir d’autres réglages), puis renseigner les valeurs fournies pour l’environnement RightTime de l’entreprise :
 
-To learn more about developing your project with Expo, look at the following resources:
+```dotenv
+EXPO_PUBLIC_RIGHTTIME_PUBLIC_KEY=pk_...
+EXPO_PUBLIC_RIGHTTIME_COMPANY=identifiant-entreprise
+EXPO_PUBLIC_RIGHTTIME_API_URL=https://api...
+EXPO_PUBLIC_RIGHTTIME_HOST_ORIGIN=https://site-autorise...
+EXPO_PUBLIC_RIGHTTIME_SDK_CDN_URL=https://cdn.../righttime.global.js
+EXPO_PUBLIC_RIGHTTIME_WIDGET_URL=https://site-autorise.../booking
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+La clé doit être une clé publique autorisée pour l’origine configurée. Ne placer aucun secret privé dans une variable `EXPO_PUBLIC_*` : Expo intègre ces valeurs dans l’application. Redémarrer Expo après toute modification du fichier `.env`.
 
-## Join the community
+Pour un serveur local, l’émulateur Android accède à l’ordinateur via `10.0.2.2`, le simulateur iOS via `127.0.0.1`, et un téléphone physique via l’adresse IP locale de l’ordinateur. Utiliser HTTPS en production.
 
-Join our community of developers creating universal apps.
+## Comment le SDK est intégré
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+### Client partagé pour les API natives
+
+`src/lib/rightcare-context.tsx` lit les variables d’environnement, crée le client avec `createRightTimeClient` et partage sa configuration avec les écrans. `src/app/_layout.tsx` installe `RightCareProvider` autour des routes.
+
+L’accueil (`src/app/index.tsx`) charge l’entreprise, les calendriers et les services actifs via le client. Le parcours (`src/app/booking.tsx`) appelle ensuite les méthodes du SDK pour charger les agents et disponibilités, puis créer un rendez-vous.
+
+### Widget fourni par le SDK
+
+`src/app/widget.tsx` charge le bundle global RightTime dans `react-native-webview`, initialise `window.RightTime` et monte le widget. Les événements de réservation remontent à l’application avec le canal `postMessage` de la WebView.
+
+Le navigateur embarqué doit pouvoir accéder au CDN, à l’API et à l’hôte du widget. L’origine utilisée doit être autorisée par la clé publique.
+
+### Page de réservation hébergée dans une WebView
+
+`src/app/webview.tsx` ouvre la page hébergée configurée par `EXPO_PUBLIC_RIGHTTIME_WIDGET_URL`. Cette méthode convient lorsqu’une entreprise possède déjà une page web de réservation responsive et souhaite la présenter dans l’application sans reconstruire son interface mobile.
+
+L’écran d’accueil ouvre directement le widget RightTime depuis le bouton principal « Prendre rendez-vous ». Le parcours natif et la page WebView sont également accessibles depuis l’écran « Explorer les intégrations ».
+
+### Résolution du paquet SDK local
+
+La dépendance Bun est déclarée comme `file:../sdk-frontend-feature-SE-e2e/packages/sdk`. `tsconfig.json` pointe les imports TypeScript vers `packages/sdk/src/index.ts`, et `metro.config.js` surveille le checkout voisin. Pour reprendre le projet dans une autre arborescence, mettre à jour le chemin de la dépendance, l’alias TypeScript et les dossiers surveillés par Metro.
+
+## Interface
+
+- `src/app/index.tsx` : accueil RightCare et spécialités chargées par le SDK.
+- `src/app/booking.tsx` : parcours natif de réservation.
+- `src/app/widget.tsx` : widget RightTime.
+- `src/app/webview.tsx` : page web de réservation intégrée en WebView.
+- `src/app/integrations.tsx` : catalogue des trois méthodes d’intégration.
+- `src/components/app-tabs.tsx` : navigation basse Accueil, Réserver et Widget.
+- `src/components/animated-icon.tsx` : animation du logo au démarrage.
+
+La barre d’état est configurée dans `src/app/_layout.tsx`. La police utilise la sans-serif native de la plateforme (Roboto sur Android, police système sans-serif sur iOS).
+
+## Ressources visuelles
+
+`app.json` définit le nom `rightCare` et l’écran de démarrage natif. Le logo animé est dessiné en SVG avec `react-native-svg`, pour éviter de dépendre du chargement des fichiers SVG comme composants par Metro.
+
