@@ -14,7 +14,7 @@ export default function TabLayout() {
   return (
     <RightCareProvider>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <StatusBar style="dark" backgroundColor="#f7faf9" />
+        <StatusBar style="dark" backgroundColor="#FFFFFF" />
         <AnimatedSplashOverlay />
         <AppTabs />
       </ThemeProvider>
