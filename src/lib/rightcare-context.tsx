@@ -31,15 +31,25 @@ const hostedWidgetUrl = process.env.EXPO_PUBLIC_RIGHTTIME_WIDGET_URL ?? '';
 
 const RightCareContext = createContext<RightCareContextValue | null>(null);
 
+function isExampleValue(value: string) {
+  return /^(pk_votre_cle_publique|votre-identifiant-entreprise)$/i.test(value.trim());
+}
+
 export function RightCareProvider({ children }: { children: ReactNode }) {
   const [settings, setSettings] = useState(defaultSettings);
   const client = useMemo<RightTimeSdkClient | null>(() => {
-    if (!settings.publicKey.trim() || !settings.company.trim()) return null;
+    if (
+      !settings.publicKey.trim() ||
+      !settings.company.trim() ||
+      isExampleValue(settings.publicKey) ||
+      isExampleValue(settings.company)
+    ) return null;
+    const hostOrigin = settings.hostOrigin.trim();
     return createRightTimeClient({
       publicKey: settings.publicKey.trim(),
       company: settings.company.trim(),
       baseUrl: settings.apiUrl.trim(),
-      hostOrigin: settings.hostOrigin.trim() || undefined,
+      hostOrigin: hostOrigin && !hostOrigin.includes('mon-site-autorise.com') ? hostOrigin : undefined,
     });
   }, [settings]);
 

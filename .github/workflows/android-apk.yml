@@ -1,0 +1,77 @@
+name: Build Android APK
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-android:
+    name: Build debug APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      EXPO_PUBLIC_RIGHTTIME_PUBLIC_KEY: ${{ secrets.RIGHTTIME_PUBLIC_KEY }}
+      EXPO_PUBLIC_RIGHTTIME_COMPANY: ${{ vars.RIGHTTIME_COMPANY }}
+      EXPO_PUBLIC_RIGHTTIME_API_URL: ${{ vars.RIGHTTIME_API_URL || 'https://api.righttime.com/v1' }}
+      EXPO_PUBLIC_RIGHTTIME_HOST_ORIGIN: ${{ vars.RIGHTTIME_HOST_ORIGIN }}
+      EXPO_PUBLIC_RIGHTTIME_SDK_CDN_URL: ${{ vars.RIGHTTIME_SDK_CDN_URL || 'https://cdn.rightcom.com/righttime/v1/righttime.global.js' }}
+      EXPO_PUBLIC_RIGHTTIME_WIDGET_URL: ${{ vars.RIGHTTIME_WIDGET_URL }}
+
+    steps:
+      - name: Checkout RightCom XP demo
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.14
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Checkout RightTime SDK source from GitLab
+        env:
+          GITLAB_READ_TOKEN: ${{ secrets.GITLAB_READ_TOKEN }}
+        run: |
+          if [ -z "$GITLAB_READ_TOKEN" ]; then
+            echo "::error::Add a GitHub Actions secret named GITLAB_READ_TOKEN with read_repository access to the SDK project."
+            exit 1
+          fi
+          git -c http.extraheader="PRIVATE-TOKEN: ${GITLAB_READ_TOKEN}" clone \
+            --filter=blob:none \
+            --no-checkout \
+            --single-branch \
+            --branch feature/SE-keyclock-integration \
+            https://gitlab.rightcomtech.com/rightcom-academie-octobre/righttime-sdk/sdk-frontend.git \
+            ../sdk-frontend-feature-SE-e2e
+          git -C ../sdk-frontend-feature-SE-e2e checkout 6952131ae4eaa66d5800aa70b91c33e5e16f6964
+          git -C ../sdk-frontend-feature-SE-e2e apply "$GITHUB_WORKSPACE/patches/righttime-sdk-expo.patch"
+
+      - name: Install dependencies with Bun
+        run: bun install --frozen-lockfile
+
+      - name: Generate Android project
+        run: bunx expo prebuild --platform android --no-install --non-interactive
+
+      - name: Build debug APK
+        run: ./gradlew assembleDebug
+        working-directory: android
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: rightcom-xp-android-${{ github.sha }}
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 14

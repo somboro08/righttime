@@ -1,0 +1,60 @@
+diff --git a/packages/sdk/src/client.ts b/packages/sdk/src/client.ts
+index 4da13c9..95b844a 100644
+--- a/packages/sdk/src/client.ts
++++ b/packages/sdk/src/client.ts
+@@ -13,13 +13,22 @@ import {
+   generateIdempotencyKey,
+ } from "./internal/retry.ts";
+ 
+-const BASE_URL =
+-  process.env.RIGHTTIME_API_URL || "https://api.righttime.com/v1";
++// Bun inlines process.env.RIGHTTIME_API_URL when the SDK is built with .env.
++// The try/catch also keeps direct browser consumers safe when it is not inlined.
++const BASE_URL = (() => {
++  try {
++    return process.env.RIGHTTIME_API_URL || "https://api.righttime.com/v1";
++  } catch {
++    return "https://api.righttime.com/v1";
++  }
++})();
+ 
+ export interface ClientOptions {
+   publicKey: string;
+   timeoutMs?: number;
+   company: string;
++  /** Override the API URL baked into the SDK build (useful for native apps). */
++  baseUrl?: string;
+   /** Retries after the first attempt on transient failures. 0 disables retries. Default: 2. */
+   maxRetries?: number;
+   fetch?: typeof fetch;
+@@ -95,7 +104,7 @@ export function createRightTimeClient(
+     hostOrigin: options.hostOrigin,
+     correlationId: options.correlationId,
+     onRequest: options.onRequest,
+-    baseUrl: BASE_URL,
++    baseUrl: options.baseUrl ?? BASE_URL,
+     timeoutMs: options.timeoutMs ?? 10000,
+     fetch: options.fetch ?? globalThis.fetch.bind(globalThis),
+     retry: { ...DEFAULT_RETRY_CONFIG, maxRetries },
+diff --git a/packages/sdk/src/widget/mount.ts b/packages/sdk/src/widget/mount.ts
+index aecb0de..17338a4 100644
+--- a/packages/sdk/src/widget/mount.ts
++++ b/packages/sdk/src/widget/mount.ts
+@@ -16,8 +16,15 @@ const IFRAME_TITLES: Record<WidgetLocale, string> = {
+   en: "Book an appointment",
+ };
+ 
+-const WIDGET_URL =
+-  process.env.RIGHTTIME_WIDGET_URL || "https://book.rightcom.com/embed";
++// Bun inlines process.env.RIGHTTIME_WIDGET_URL when the SDK is built with .env.
++// The try/catch also keeps direct browser consumers safe when it is not inlined.
++const WIDGET_URL = (() => {
++  try {
++    return process.env.RIGHTTIME_WIDGET_URL || "https://book.rightcom.com/embed";
++  } catch {
++    return "https://book.rightcom.com/embed";
++  }
++})();
+ 
+ export interface WidgetOptions {
+   /**

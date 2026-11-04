@@ -22,6 +22,14 @@ Après une modification de Metro ou du SDK local, vider son cache :
 bun run start -- --clear
 ```
 
+## Build APK sur GitHub
+
+Le workflow `.github/workflows/android-apk.yml` se déclenche à chaque push et construit un APK Android debug signé avec la clé debug, puis publie l’APK comme artefact GitHub Actions pendant 14 jours. Après un run réussi, télécharge `rightcom-xp-android-<commit>` dans l’onglet Actions du dépôt.
+
+Le SDK est hébergé dans le dépôt privé GitLab. Ajouter dans **Settings → Secrets and variables → Actions** un secret `GITLAB_READ_TOKEN` disposant de `read_repository`. Sans ce secret, le workflow s’arrête à l’étape de récupération du SDK.
+
+Pour que l’APK charge les services RightTime, configurer aussi le secret `RIGHTTIME_PUBLIC_KEY` et les variables `RIGHTTIME_COMPANY`, `RIGHTTIME_API_URL` et `RIGHTTIME_HOST_ORIGIN` dans GitHub. Ces valeurs sont intégrées au bundle mobile au moment du build. Ne pas utiliser une adresse `localhost` pour l’API dans un APK installé sur un téléphone.
+
 ## Configuration RightTime
 
 Ajouter ces variables au fichier `.env` local (il peut déjà contenir d’autres réglages), puis renseigner les valeurs fournies pour l’environnement RightTime de l’entreprise :
@@ -45,7 +53,7 @@ Pour un serveur local, l’émulateur Android accède à l’ordinateur via `10.
 
 `src/lib/rightcare-context.tsx` lit les variables d’environnement, crée le client avec `createRightTimeClient` et partage sa configuration avec les écrans. `src/app/_layout.tsx` installe `RightCareProvider` autour des routes.
 
-L’accueil (`src/app/index.tsx`) charge l’entreprise, les calendriers et les services actifs via le client. Le parcours (`src/app/booking.tsx`) appelle ensuite les méthodes du SDK pour charger les agents et disponibilités, puis créer un rendez-vous.
+L’accueil (`src/app/index.tsx`) affiche uniquement des cartes de services fictifs pour la démonstration ; il ne charge aucune donnée du SDK. Le bouton de réservation ouvre `src/components/booking-bottom-sheet.tsx`, qui affiche le parcours de `src/components/booking-flow.tsx`. C’est dans ce parcours que le SDK charge les calendriers et services, les agents et les disponibilités, puis crée le rendez-vous. La route `src/app/booking.tsx` réutilise le même parcours en plein écran.
 
 ### Widget fourni par le SDK
 
@@ -65,17 +73,19 @@ La dépendance Bun est déclarée comme `file:../sdk-frontend-feature-SE-e2e/pac
 
 ## Interface
 
-- `src/app/index.tsx` : accueil RightCare et spécialités chargées par le SDK.
-- `src/app/booking.tsx` : parcours natif de réservation.
+- `src/app/index.tsx` : accueil RightCom XP avec services de démonstration fictifs.
+- `src/app/booking.tsx` : route plein écran réutilisant le parcours SDK.
+- `src/components/booking-bottom-sheet.tsx` : bottom sheet de réservation ouvert depuis l’accueil.
+- `src/components/booking-flow.tsx` : formulaire complet de réservation connecté au SDK.
 - `src/app/widget.tsx` : widget RightTime.
 - `src/app/webview.tsx` : page web de réservation intégrée en WebView.
 - `src/app/integrations.tsx` : catalogue des trois méthodes d’intégration.
 - `src/components/app-tabs.tsx` : navigation basse Accueil, Réserver et Widget.
-- `src/components/animated-icon.tsx` : animation du logo au démarrage.\n- `src/components/xp-logo.tsx` : marque vectorielle XP réutilisable.
+- `src/components/animated-icon.tsx` : animation du logo RightTime au démarrage.
 
 La barre d’état est configurée dans `src/app/_layout.tsx`. La police utilise la sans-serif native de la plateforme (Roboto sur Android, police système sans-serif sur iOS).
 
 ## Ressources visuelles
 
-`app.json` définit le nom `RightCom XP` et l’écran de démarrage natif. Le logo XP est dessiné localement avec `react-native-svg`, sans dépendre d’un chargement distant.
+`app.json` définit le nom `RightCom XP` et utilise `assets/imgi_7_righttime-256x256.png` pour l’écran de démarrage natif. Le header et le splash animé réutilisent cette même image. Les variantes PNG plus petites sont disponibles dans `assets/` pour les usages d’icône.
 
