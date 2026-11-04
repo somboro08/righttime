@@ -12,6 +12,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useRightCare } from '@/lib/rightcare-context';
+import { XpLogo } from '@/components/xp-logo';
 
 interface ListedService {
   service: Service;
@@ -67,7 +68,7 @@ export default function HomeScreen() {
       <ScrollView contentContainerStyle={styles.page} showsVerticalScrollIndicator={false}>
         <View style={styles.topBar}>
           <View style={styles.brandRow}>
-            <View style={styles.brandMark}><Text style={styles.brandMarkText}>XP</Text></View>
+            <View style={styles.brandMark}><XpLogo size={35} /></View>
             <View>
               <Text style={styles.brandName}>RightCom XP</Text>
               <Text style={styles.brandCaption}>{companyName}</Text>
@@ -84,7 +85,7 @@ export default function HomeScreen() {
             <Text style={styles.heroTitle}>Une nouvelle expérience de réservation.</Text>
             <Text style={styles.heroText}>Découvrez nos services et réservez votre créneau en quelques étapes.</Text>
             <Pressable accessibilityRole="button" onPress={() => router.push('/widget' as never)} style={styles.heroButton}>
-              <Text style={styles.heroButtonText}>Prendre rendez-vous</Text>
+              <Text style={styles.heroButtonText}>Réserver maintenant</Text>
               <Text style={styles.heroArrow}>›</Text>
             </Pressable>
           </View>
@@ -137,7 +138,7 @@ export default function HomeScreen() {
         </View>
 
         <View style={styles.widgetBanner}>
-          <View style={styles.widgetBadge}><Text style={styles.widgetBadgeText}>rightTime</Text></View>
+          <View style={styles.widgetBadge}><Text style={styles.widgetBadgeText}>RIGHTTIME</Text></View>
           <Text style={styles.widgetTitle}>Votre réservation, en toute simplicité</Text>
           <Text style={styles.widgetDescription}>Choisissez votre service et trouvez le créneau qui vous convient.</Text>
           <Pressable onPress={() => router.push('/widget' as never)} style={styles.widgetButton}>
@@ -175,8 +176,8 @@ const styles = StyleSheet.create({
   page: { paddingHorizontal: 20, paddingTop: 8, paddingBottom: 32, gap: 22 },
   topBar: { alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between' },
   brandRow: { alignItems: 'center', flexDirection: 'row', gap: 10 },
-  brandMark: { alignItems: 'center', backgroundColor: '#0877ED', borderRadius: 22, height: 44, justifyContent: 'center', width: 44 },
-  brandMarkText: { color: '#fff', fontSize: 18, fontWeight: '900', letterSpacing: -1.5 },
+  brandMark: { alignItems: 'center', backgroundColor: '#FFFFFF', borderColor: '#E8ECF3', borderWidth: 1, borderRadius: 22, height: 48, justifyContent: 'center', width: 48 },
+
   brandName: { color: '#17192F', fontSize: 18, fontWeight: '800', letterSpacing: -0.5 },
   brandCaption: { color: '#8A91A3', fontSize: 11, marginTop: 1 },
   avatar: { alignItems: 'center', backgroundColor: '#EAF4FF', borderRadius: 22, height: 42, justifyContent: 'center', width: 42 },
